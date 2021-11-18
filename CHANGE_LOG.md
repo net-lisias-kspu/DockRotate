@@ -1,5 +1,7 @@
 # Dock Rotate /L Unleashed :: Change Log
 
+* 2019-1031: 1.8.1.40 (peteletroll) for KSP 1.8
+	+ No changelog provided
 * 2019-1022: 1.8.0.39b (peteletroll) for KSP 1.8 PRE-RELEASE
 	+ This is a temporary workaround for KSP 1.8. The widget used for setting rotation step and speed is buggy, so I replaced it wit a simpler one, which is uncomfortable. I recommend using the new "#" button on the part menu and typing directly the desired values.
 * 2019-1019: 1.7.0.39 (peteletroll) for KSP 1.8
