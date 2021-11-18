@@ -32,7 +32,7 @@ using CompoundParts;
 
 namespace DockRotate
 {
-	public abstract class ModuleBaseRotate: PartModule,
+	public abstract partial class ModuleBaseRotate: PartModule,
 		IJointLockState, IResourceConsumer
 	{
 		protected const string GROUPNAME = "DockRotate";
@@ -70,6 +70,7 @@ namespace DockRotate
 			}
 		}
 
+#if false
 		[KSPField(
 			guiName = "#DCKROT_angle",
 			groupName = GROUPNAME,
@@ -79,8 +80,10 @@ namespace DockRotate
 			guiActiveEditor = true
 		)]
 		public string angleInfo;
+#endif
 		private static string angleInfoNA = Localizer.Format("#DCKROT_n_a");
 
+#if false
 		[UI_Toggle]
 		[KSPField(
 			groupName = GROUPNAME,
@@ -152,6 +155,7 @@ namespace DockRotate
 			guiName = "#DCKROT_flip_flop_mode"
 		)]
 		public bool flipFlopMode = false;
+#endif
 
 		[KSPField(isPersistant = true)]
 		public string soundClip = "DockRotate/DockRotateMotor";
@@ -162,6 +166,7 @@ namespace DockRotate
 		[KSPField(isPersistant = true)]
 		public float soundPitch = 1f;
 
+#if false
 		[UI_Toggle]
 		[KSPField(
 			groupName = DEBUGGROUP,
@@ -181,9 +186,11 @@ namespace DockRotate
 			groupStartCollapsed = true
 		)]
 		public float anglePosition;
+#endif
 
 		private bool needsAlignment;
 
+#if false
 		[KSPField(
 			guiActive = DEBUGMODE,
 			groupName = DEBUGGROUP,
@@ -229,7 +236,7 @@ namespace DockRotate
 		)]
 		public float axisField = 0f;
 #endif
-
+#endif
 		[KSPAction(
 			guiName = "#DCKROT_enable_rotation",
 			requireFullControl = true
@@ -274,6 +281,7 @@ namespace DockRotate
 			}
 		}
 
+#if false
 		[KSPEvent(
 			guiName = "#DCKROT_rotate_clockwise",
 			groupName = GROUPNAME,
@@ -287,6 +295,7 @@ namespace DockRotate
 		{
 			doRotateClockwise();
 		}
+#endif
 
 		[KSPAction(
 			guiName = "#DCKROT_rotate_counterclockwise",
@@ -302,6 +311,7 @@ namespace DockRotate
 			}
 		}
 
+#if false
 		[KSPEvent(
 			guiName = "#DCKROT_rotate_counterclockwise",
 			groupName = GROUPNAME,
@@ -315,6 +325,7 @@ namespace DockRotate
 		{
 			doRotateCounterclockwise();
 		}
+#endif
 
 		[KSPAction(
 			guiName = "#DCKROT_rotate_to_snap",
@@ -326,6 +337,7 @@ namespace DockRotate
 			doRotateToSnap();
 		}
 
+#if false
 		[KSPEvent(
 			guiName = "#DCKROT_rotate_to_snap",
 			groupName = GROUPNAME,
@@ -339,6 +351,7 @@ namespace DockRotate
 		{
 			doRotateToSnap();
 		}
+#endif
 
 		[KSPAction(
 			guiName = "#DCKROT_stop_rotation",
@@ -351,6 +364,7 @@ namespace DockRotate
 		}
 
 		private BaseEvent StopRotationEvent;
+#if false
 		[KSPEvent(
 			guiName = "#DCKROT_stop_rotation",
 			groupName = GROUPNAME,
@@ -364,7 +378,9 @@ namespace DockRotate
 		{
 			doStopRotation();
 		}
+#endif
 
+#if false
 #if DEBUG
 		[UI_Toggle]
 #endif
@@ -392,9 +408,11 @@ namespace DockRotate
 			groupStartCollapsed = true
 		)]
 		public bool hideCommands = false;
+#endif
 
 #if DEBUG
 		BaseEvent ToggleAutoStrutDisplayEvent;
+#if false
 		[KSPEvent(
 			guiName = "Toggle Autostrut Display",
 			guiActive = true,
@@ -405,11 +423,17 @@ namespace DockRotate
 		)]
 		public void ToggleAutoStrutDisplay()
 		{
+			this.doToggleAutoStrutDisplay();
+		}
+#endif
+		private void doToggleAutoStrutDisplay()
+		{
 			PhysicsGlobals.AutoStrutDisplay = !PhysicsGlobals.AutoStrutDisplay;
 			if (HighLogic.LoadedSceneIsEditor)
 				GameEvents.onEditorPartEvent.Fire(ConstructionEventType.PartTweaked, part);
 		}
 
+#if false
 		[KSPEvent(
 			guiActive = true,
 			groupName = DEBUGGROUP,
@@ -418,6 +442,11 @@ namespace DockRotate
 		)]
 		public void DumpToLog()
 		{
+			this.doDumpToLog();
+		}
+#endif
+		private void doDumpToLog()
+		{ 
 			string d = desc(true);
 			Log.trace(d, ": BEGIN DUMP");
 
@@ -448,6 +477,7 @@ namespace DockRotate
 		{
 		}
 
+#if false
 		[KSPEvent(
 			guiName = "Cycle Autostruts",
 			guiActive = true,
@@ -475,6 +505,7 @@ namespace DockRotate
 		{
 			GameEvents.debugEvents = !GameEvents.debugEvents;
 		}
+#endif
 #endif
 
 		public void doRotateClockwise()

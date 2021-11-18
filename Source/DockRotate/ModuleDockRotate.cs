@@ -29,7 +29,7 @@ using KSP.UI.Screens.DebugToolbar;
 
 namespace DockRotate
 {
-	public class ModuleDockRotate: ModuleBaseRotate
+	public partial class ModuleDockRotate: ModuleBaseRotate
 	{
 		/*
 
@@ -79,11 +79,12 @@ namespace DockRotate
 		public void SwitchToReady()
 		{
 			if (dockingNode && dockingNode.fsm != null && dockingNode.state == "Disengage") {
-				dockingNode.DebugFSMState = true;
+				Util.setDebug(dockingNode);
 				dockingNode.fsm.StartFSM("Ready");
 			}
 		}
 
+#if false
 		[KSPEvent(
 			guiActive = true,
 			// put right label and group according to DEBUG
@@ -97,6 +98,11 @@ namespace DockRotate
 #endif
 		)]
 		public void CheckDockingState()
+		{
+			this.doCheckDockingState();
+		}
+#endif
+		private void doCheckDockingState()
 		{
 			Log.trace(part.desc(), ": DOCKING STATE CHECK");
 
@@ -230,7 +236,7 @@ namespace DockRotate
 				Log.detail(nameof(ModuleDockRotate), "Part: {0}-{1} FSM Start State {2} in ModuleDockRotate.doSetup({3})"
 						, part.name, part.persistentId, dockingNode.state, part.flightID
 					);
-				dockingNode.DebugFSMState = true;
+				Util.setDebug(dockingNode);
 			}
 #endif
 
@@ -256,22 +262,6 @@ namespace DockRotate
 					enqueueFrozenRotation(jointMotion.angleToSnap(snap), 5f);
 				}
 			}
-		}
-
-		private static bool usingStockRotation(ModuleDockingNode node)
-		{
-			if (!node)
-				return false;
-			return node.IsRotating || !node.targetAngle.isZero();
-		}
-
-		protected override bool canStartRotation(bool ignoreDisabled = false)
-		{
-			if (usingStockRotation(dockingNode) || usingStockRotation(dockingNode.otherNode)) {
-				Log.trace(desc(), ".canStartRotation(): disabled, using stock rotation");
-				return false;
-			}
-			return base.canStartRotation(ignoreDisabled);
 		}
 
 		protected override void updateStatus(JointMotionObj cr)
@@ -305,24 +295,6 @@ namespace DockRotate
 		{
 			return "MDR";
 		}
-
-#if DEBUG
-		public override void dumpExtra()
-		{
-			string d = desc();
-			if (dockingNode) {
-				Log.dbg("{0}: attachJoint: {1}", d, part.attachJoint.desc());
-				Log.dbg("{0}: dockedPartUId: {1}", d, dockingNode.dockedPartUId);
-				Log.dbg("{0}: dockingNode state: \"{1}\"", d, dockingNode.state);
-				Log.dbg("{0}: sameVesselDockingJoint: {1}", d, dockingNode.sameVesselDockJoint.desc());
-				Log.dbg("{0}: stock rotation: {1} {2}", d, dockingNode.IsRotating, dockingNode.targetAngle);
-				Log.dbg("{0}: vesselInfo = {1}", d, dockingNode.vesselInfo.desc());
-				Log.dbg("{0}: canRotateDefault() = {1}", d, canRotateDefault());
-			} else {
-				Log.dbg("{0}: no dockingNode", d);
-			}
-		}
-#endif
 
 		private static char[] commandSeparators = { ' ', '\t' };
 

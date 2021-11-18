@@ -489,7 +489,7 @@ namespace DockRotate
 				}
 
 				result.msg("fixing " + info(node));
-				node.DebugFSMState = true;
+				Util.setDebug(node);
 				checker.setState(result, node, nodeFixTo, null);
 				result.msg("fixed to " + info(node));
 
@@ -605,7 +605,7 @@ namespace DockRotate
 				}
 
 				result.msg("fixing " + info(host) + " -> " + info(target));
-				host.DebugFSMState = target.DebugFSMState = true;
+				Util.setDebug(host, target);
 				if (hostFixTo != "")
 					checker.setState(result, host, hostFixTo, target);
 				if (targetFixTo != "")
@@ -715,7 +715,7 @@ namespace DockRotate
 				result.msg("updating dockedPartUId from " + node.dockedPartUId + " to " + otherID);
 				node.dockedPartUId = otherID;
 			}
-			node.DebugFSMState = true;
+			Util.setDebug(node);
 			if (node.fsm != null)
 				node.fsm.StartFSM(state);
 		}
