@@ -1,5 +1,7 @@
 # Dock Rotate /L Unleashed :: Change Log
 
+* 2018-1112: 1.5.1.18 (peteletroll) for KSP 1.4.3.
+	+ No changelog provided
 * 2018-1102: 1.5.1.17 (peteletroll) for KSP 1.4.3.
 	+ Now rotation can be continuous (set rotation step to 0) and fast (new UI for wider speed range up to 3600°/s).
 	+ New UI for fine control of rotation step from 1°/s to 360°/s.
