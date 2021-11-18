@@ -1,5 +1,8 @@
 # Dock Rotate /L Unleashed :: Change Log
 
+* 2019-0210: 1.6.1.23 (peteletroll) for KSP 1.4.3.
+	+ 1) added flip-flop mode for deploy/release with a single action group;
+	+ 2) HUGE refactoring, now almost everything is a MonoBehaviour.
 * 2019-0118: 1.6.1.22 (peteletroll) for KSP 1.4.3.
 	+ Robotic arms with Advanced Grabbing Units work much better now.
 * 2018-1225: 1.5.1.21 (peteletroll) for KSP 1.4.3.
