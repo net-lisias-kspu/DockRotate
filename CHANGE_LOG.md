@@ -1,5 +1,7 @@
 # Dock Rotate /L Unleashed :: Change Log
 
+* 2020-0320: 1.9.1.44 (peteletroll) for KSP 1.8
+	+ Now PartModules and MonoBehaviours enable Update() and FixedUpdate() only when needed.
 * 2020-0307: 1.9.1.43 (peteletroll) for KSP 1.8
 	+ No changelog provided
 * 2020-0215: 1.9.0.42 (peteletroll) for KSP 1.8
