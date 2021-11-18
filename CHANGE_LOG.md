@@ -1,5 +1,7 @@
 # Dock Rotate /L Unleashed :: Change Log
 
+* 2019-0515: 1.7.0.37 (peteletroll) for KSP 1.4.3.
+	+ This fixes a NodeRotate related bug. Please upgrade!
 * 2019-0512: 1.7.0.36 (peteletroll) for KSP 1.4.3.
 	+ Experimental compatibility with KJR Next.
 * 2019-0428: 1.7.0.35 (peteletroll) for KSP 1.4.3.
