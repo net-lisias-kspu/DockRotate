@@ -1,5 +1,7 @@
 # Dock Rotate /L Unleashed :: Change Log
 
+* 2018-0303: 1.3.1.5 (peteletroll) for KSP 1.3.1
+	+ No changelog provided
 * 2018-0223: 1.3.1.4 (peteletroll) for KSP 1.3.1
 	+ Better handling of undocking while moving and multidocking
 * 2018-0222: 1.3.1.3 (peteletroll) for KSP 1.3.1
