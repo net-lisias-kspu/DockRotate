@@ -1,5 +1,8 @@
 # Dock Rotate /L Unleashed :: Change Log
 
+* 2018-1018: 1.4.4.16 (peteletroll) for KSP 1.4.3.
+	+ If the rotation step is set to 0, the rotation will be continuous. You can stop it with the "Stop Rotation" right-click menu entry, the "Stop Rotation" action, or Alt-B.
+	+ This release is compiled on 1.4.5, but works on 1.5.0 too.
 * 2018-0706: 1.4.4.15 (peteletroll) for KSP 1.4.3.
 	+ If you press the modifier keys (Alt on Windows, Right Shift on Linux), all rotation actions are reversed: for example, if "1" rotates a port clockwise, "Mod-1" will rotate it counterclockwise.
 	+ All docking/undocking/decoupling events while moving are handled properly now.
