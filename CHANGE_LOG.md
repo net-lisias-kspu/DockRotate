@@ -1,5 +1,7 @@
 # Dock Rotate /L Unleashed :: Change Log
 
+* 2018-0324: 1.4.1.10 (peteletroll) for KSP 1.4.1
+	+ Smart Autostruts added, need Advanced Tweakables. Experimental feature!
 * 2018-0318: 1.4.1.9 (peteletroll) for KSP 1.4.1
 	+ Better precision
 	+ Added .version file
