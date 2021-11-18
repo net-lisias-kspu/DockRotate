@@ -52,7 +52,7 @@ namespace DockRotate
 		{
 			string assembly = System.Reflection.Assembly.GetExecutingAssembly().Location;
 			string directory = System.IO.Path.GetDirectoryName(assembly);
-			return System.IO.Path.Combine(directory, "PluginData", configName + ".cfg");
+			return System.IO.Path.Combine(System.IO.Path.Combine(directory, "PluginData"), configName + ".cfg");
 		}
 
 
