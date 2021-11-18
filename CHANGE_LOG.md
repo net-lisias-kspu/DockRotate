@@ -1,5 +1,7 @@
 # Dock Rotate /L Unleashed :: Change Log
 
+* 2018-0421: 1.4.1.12 (peteletroll) for KSP 1.4.1
+	+ Bug fix by heavy refactoring
 * 2018-0420: 1.4.1.11 (peteletroll) for KSP 1.4.1
 	+ Added NodeRotate module
 	+ French and Italian localization
