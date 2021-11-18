@@ -1,5 +1,7 @@
 # Dock Rotate /L Unleashed :: Change Log
 
+* 2020-1025: 1.10.1.52 (peteletroll) for KSP 1.8
+	+ Bug fix
 * 2020-1009: 1.10.1.51 (peteletroll) for KSP 1.8
 	+ Fixed weird NRE with some part mods
 * 2020-0924: 1.10.1.50 (peteletroll) for KSP 1.8
