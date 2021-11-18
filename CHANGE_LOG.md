@@ -1,5 +1,7 @@
 # Dock Rotate /L Unleashed :: Change Log
 
+* 2018-0222: 1.3.1.3 (peteletroll) for KSP 1.3.1
+	+ Now autostruts are automatically disabled during motion.
 * 2018-0220: 1.3.1.2 (peteletroll) for KSP 1.3.1
 	+ All stock docking ports supported. See README.md for Clamp-O-Tron Sr.
 * 2018-0202: 1.3.1.1 (peteletroll) for KSP 1.3.1
