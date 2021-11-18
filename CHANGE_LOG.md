@@ -1,5 +1,9 @@
 # Dock Rotate /L Unleashed :: Change Log
 
+* 2018-0420: 1.4.1.11 (peteletroll) for KSP 1.4.1
+	+ Added NodeRotate module
+	+ French and Italian localization
+	+ Smart autostruts by default
 * 2018-0324: 1.4.1.10 (peteletroll) for KSP 1.4.1
 	+ Smart Autostruts added, need Advanced Tweakables. Experimental feature!
 * 2018-0318: 1.4.1.9 (peteletroll) for KSP 1.4.1
