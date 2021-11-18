@@ -3,13 +3,13 @@ using System.Runtime.CompilerServices;
 
 // Information about this assembly is defined by the following attributes.
 // Change them to the values specific to your project.
-[assembly: AssemblyTitle("DockRotate")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Dock Rotate /L Unleashed")]
+[assembly: AssemblyDescription("Kerbal Space Program lightweight robotics with docking ports")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("")]
-[assembly: AssemblyCopyright("peteletroll")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCompany(DockRotate.LegalMamboJambo.Company)]
+[assembly: AssemblyProduct(DockRotate.LegalMamboJambo.Product)]
+[assembly: AssemblyCopyright(DockRotate.LegalMamboJambo.Copyright)]
+[assembly: AssemblyTrademark(DockRotate.LegalMamboJambo.Trademark)]
 [assembly: AssemblyCulture("")]
 // The assembly version has the format "{Major}.{Minor}.{Build}.{Revision}".
 // The form "{Major}.{Minor}.*" will automatically update the build and revision,

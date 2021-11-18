@@ -1,8 +1,10 @@
 # Dock Rotate /L Unleashed :: Archive
 
-Kerbal Space Program lightweight robotics with docking ports
+Kerbal Space Program lightweight robotics with docking ports.
 
 [Unleashed](https://ksp.lisias.net/add-ons-unleashed/) fork by Lisias.
+
+Be sure to read and understand this [statement](#your-attention-please).
 
 
 ## In a Hurry
@@ -106,6 +108,14 @@ These are the rotating parts contributed by @Psycho_zs:
 ![](./PR_material/qGhdOEQ.png)
 ![](./PR_material/6Y3kqlo.png)
 
+
+## Your Attention Please
+
+This fork **does not** follows the [Forum](https://forum.kerbalspaceprogram.com/)'s [Add-On Posting Rules](https://www.kerbalspaceprogram.com/add-on-posting-rules/), besides being 100% legal in most (if not all) countries in this World:
+
+* Item 9: It makes use of private methods on the KSP's Assemblies.
+
+Use it at your own discretion. **_DO NOT_** publish this on Forum.
 
 
 ## UPSTREAM

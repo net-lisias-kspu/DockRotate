@@ -43,6 +43,7 @@
     <Compile Include="ModuleNodeRotate.cs" />
     <Compile Include="ModuleDockRotate.cs" />
     <Compile Include="DockingStateChecker.cs" />
+    <Compile Include="Properties\LegalMamboJambo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
