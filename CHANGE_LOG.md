@@ -1,5 +1,7 @@
 # Dock Rotate /L Unleashed :: Change Log
 
+* 2019-0224: 1.6.1.25 (peteletroll) for KSP 1.4.3.
+	+ Now some rotation testing can be done in VAB and SPH
 * 2019-0216: 1.6.1.24 (peteletroll) for KSP 1.4.3.
 	+ This release solves a Smart Autostruts related problem that may happen when two docked ports have different Smart Autostruts settings. Now if one of the docked ports has Smart Autostruts enabled, the other one will have the flag activated too.
 * 2019-0210: 1.6.1.23 (peteletroll) for KSP 1.4.3.
