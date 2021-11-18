@@ -1,5 +1,7 @@
 # Dock Rotate /L Unleashed :: Change Log
 
+* 2018-1124: 1.5.1.20 (peteletroll) for KSP 1.4.3.
+	+ This is for variable AoA propellers.
 * 2018-1116: 1.5.1.19 (peteletroll) for KSP 1.4.3.
 	+ NodeRotate now works when attached to physicsless parts too (it actually converts them to full physics parts).
 	+ And a new motor part by Psycho_zs.
