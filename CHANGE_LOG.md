@@ -1,5 +1,7 @@
 # Dock Rotate /L Unleashed :: Change Log
 
+* 2019-1019: 1.7.0.39 (peteletroll) for KSP 1.8
+	+ No changelog provided
 * 2019-0715: 1.7.0.38c (peteletroll) for KSP 1.4.3. PRE-RELEASE
 	+ This is a pre-release for snapOffset align testing
 * 2019-0515: 1.7.0.37 (peteletroll) for KSP 1.4.3.
