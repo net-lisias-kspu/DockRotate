@@ -28,6 +28,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using Asset = KSPe.IO.Asset<DockRotate.DockingStateChecker>;
+using Data = KSPe.IO.Data<DockRotate.DockingStateChecker>;
+
 namespace DockRotate
 {
 	public class DockingStateChecker
@@ -48,26 +51,23 @@ namespace DockRotate
 		private List<NodeState> nodeStates = new List<NodeState>();
 		private List<JointState> jointStates = new List<JointState>();
 
-		private static string configFile()
-		{
-			string assembly = System.Reflection.Assembly.GetExecutingAssembly().Location;
-			string directory = System.IO.Path.GetDirectoryName(assembly);
-			return System.IO.Path.Combine(System.IO.Path.Combine(directory, "PluginData"), configName + ".cfg");
-		}
-
-
 		private static DockingStateChecker lastLoaded = null;
 		private static int lastLoadedAt = 0;
+
+		private static readonly Asset.ConfigNode DEFAULT = Asset.ConfigNode.For("DockingStateChecker", "DockingStateChecker.cfg");
+		private static readonly Data.ConfigNode DATA = Data.ConfigNode.For("DockingStateChecker");
 
 		public static DockingStateChecker load()
 		{
 			if (lastLoaded != null && lastLoadedAt == Time.frameCount)
 				return lastLoaded;
 
+			Log.trace(nameof(DockingStateChecker), "loading");
 			lastLoaded = null;
 			try {
-				Log.trace(nameof(DockingStateChecker), "loading {0}", configFile());
-				ConfigNode cn = ConfigNode.Load(configFile());
+				if (!DATA.IsLoadable) DATA.Save(DEFAULT.Load().Node);
+				DATA.Load();
+				ConfigNode cn = DATA.Node;
 				if (cn == null)
 					throw new Exception("null ConfigNode");
 				cn = cn.GetNode(configName);
@@ -80,28 +80,21 @@ namespace DockRotate
 				else
 					Log.trace(nameof(DockingStateChecker), "loaded, check disabled");
 			} catch (Exception e) {
-				Log.error(e, "can't load using builtin configuration");
+				Log.error(e, "can't load! using builtin configuration");
+				DATA.Destroy();
 				lastLoaded = builtin();
-				if (!System.IO.File.Exists(configFile()))
-					lastLoaded.save();
 			}
 			return lastLoaded;
 		}
 
 		private bool save()
 		{
+			Log.trace(nameof(DockingStateChecker), "saving");
 			bool ret = false;
 			try {
-				string file = configFile();
-				string directory = System.IO.Path.GetDirectoryName(file);
-				if (!System.IO.Directory.Exists(directory)) {
-					Log.trace(nameof(DockingStateChecker), "creating directory " + directory);
-					System.IO.Directory.CreateDirectory(directory);
-				}
-				ConfigNode cn = new ConfigNode("root");
+				ConfigNode cn = new ConfigNode("DockingStateChecker");
 				cn.AddNode(toConfigNode());
-				Log.trace(nameof(DockingStateChecker), "saving {0}", file);
-				cn.Save(file);
+				DATA.Save(cn);
 				ret = true;
 			} catch (Exception e) {
 				Log.error("can't save: {0}", e.Message);
