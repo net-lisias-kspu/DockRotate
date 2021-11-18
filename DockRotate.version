@@ -1,31 +1,19 @@
 {
-	"NAME": "DockRotate",
-	"DOWNLOAD": "https://github.com/peteletroll/DockRotate/releases",
-	"URL": "https://raw.githubusercontent.com/peteletroll/DockRotate/master/Resources/DockRotate.version",
-	"GITHUB": {
-		"USERNAME": "peteletroll",
-		"REPOSITORY": "DockRotate"
-	},
-	"VERSION": {
+	"NAME"		: "Dock Rotate /L Unleashed",
+	"URL"		: "https://raw.githubusercontent.com/net-lisias-kspu/DockRotate/master/DockRotate.version",
+	"DOWNLOAD"	: "https://github.com/net-lisias-kspu/DockRotate/releases",
+	"CHANGE_LOG"	: "https://raw.githubusercontent.com/net-lisias-kspu/DockRotate/master/CHANGE_LOG.md",
+	"CHANGE_LOG_URL": "https://raw.githubusercontent.com/net-lisias-kspu/DockRotate/master/CHANGES.md",
+	"VERSION":{
 		"MAJOR": 1,
 		"MINOR": 12,
 		"PATCH": 1,
 		"BUILD": 55
 	},
-	"KSP_VERSION": {
-		"MAJOR": 1,
-		"MINOR": 12,
-		"PATCH": 1
-	},
-	"KSP_VERSION_MIN": {
+	"KSP_VERSION_MIN":{
 		"MAJOR": 1,
 		"MINOR": 12,
 		"PATCH": 0
-	},
-	"KSP_VERSION_MAX": {
-		"MAJOR": 1,
-		"MINOR": 12,
-		"PATCH": 99
 	}
 }
 
