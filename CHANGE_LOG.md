@@ -1,5 +1,9 @@
 # Dock Rotate /L Unleashed :: Change Log
 
+* 2018-0622: 1.4.3.14 (peteletroll) for KSP 1.4.3.
+	+ Recompiled for 1.4.3. Should work with any 1.4.* anyway.
+		- Lots of refactoring. I apparently like moving code around a lot.
+		- Better handling of going on rails while moving.
 * 2018-0427: 1.4.1.13 (peteletroll) for KSP 1.4.1
 	+ added Psycho_zs rotating parts based on NodeRotate
 	+ French and Spanish localization
