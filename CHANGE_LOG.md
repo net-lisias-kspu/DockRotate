@@ -1,5 +1,7 @@
 # Dock Rotate /L Unleashed :: Change Log
 
+* 2020-0924: 1.10.1.50 (peteletroll) for KSP 1.8
+	+ More docking state checks
 * 2020-0711: 1.10.0.49 (peteletroll) for KSP 1.8
 	+ Configurable docking state checks
 * 2020-0629: 1.9.1.48 (peteletroll) for KSP 1.8
