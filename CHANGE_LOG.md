@@ -1,5 +1,7 @@
 # Dock Rotate /L Unleashed :: Change Log
 
+* 2018-0311: 1.4.0.7 (peteletroll) for KSP 1.4.0
+	+ No changelog provided
 * 2018-0310: 1.4.0.6 (peteletroll) for KSP 1.4.0
 	+ No changelog provided
 * 2018-0303: 1.3.1.5 (peteletroll) for KSP 1.3.1
