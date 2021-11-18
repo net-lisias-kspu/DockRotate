@@ -1,5 +1,7 @@
 # Dock Rotate /L Unleashed :: Change Log
 
+* 2019-0118: 1.6.1.22 (peteletroll) for KSP 1.4.3.
+	+ Robotic arms with Advanced Grabbing Units work much better now.
 * 2018-1225: 1.5.1.21 (peteletroll) for KSP 1.4.3.
 	+ Bug fixes, optimizations, random refactoring... the usual stuff.
 * 2018-1124: 1.5.1.20 (peteletroll) for KSP 1.4.3.
