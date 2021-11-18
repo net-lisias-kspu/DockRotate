@@ -1,5 +1,7 @@
 # Dock Rotate /L Unleashed :: Change Log
 
+* 2019-0319: 1.6.1.28 (peteletroll) for KSP 1.4.3.
+	+ No changelog provided
 * 2019-0319: 1.6.1.27 (peteletroll) for KSP 1.4.3.
 	+ Fixed a bug: in the editor, if you detached a port that was connected to another you'd lose the attachment node, i.e. you couldn't reattach it.
 * 2019-0317: 1.6.1.26 (peteletroll) for KSP 1.4.3.
