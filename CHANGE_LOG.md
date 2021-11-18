@@ -1,5 +1,7 @@
 # Dock Rotate /L Unleashed :: Change Log
 
+* 2019-0317: 1.6.1.26 (peteletroll) for KSP 1.4.3.
+	+ Included DeltaDizzy patch
 * 2019-0224: 1.6.1.25 (peteletroll) for KSP 1.4.3.
 	+ Now some rotation testing can be done in VAB and SPH
 * 2019-0216: 1.6.1.24 (peteletroll) for KSP 1.4.3.
