@@ -1,5 +1,8 @@
 # Dock Rotate /L Unleashed :: Change Log
 
+* 2018-0316: 1.4.1.8 (peteletroll) for KSP 1.4.1
+	+ Recompiled for KSP 1.4.1
+	+ Added sound effect
 * 2018-0311: 1.4.0.7 (peteletroll) for KSP 1.4.0
 	+ No changelog provided
 * 2018-0310: 1.4.0.6 (peteletroll) for KSP 1.4.0
