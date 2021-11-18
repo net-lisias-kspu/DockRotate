@@ -1,5 +1,9 @@
 # Dock Rotate /L Unleashed :: Change Log
 
+* 2018-0318: 1.4.1.9 (peteletroll) for KSP 1.4.1
+	+ Better precision
+	+ Added .version file
+	+ Fixed missing resetVessel() after docking
 * 2018-0316: 1.4.1.8 (peteletroll) for KSP 1.4.1
 	+ Recompiled for KSP 1.4.1
 	+ Added sound effect
