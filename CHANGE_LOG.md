@@ -1,5 +1,8 @@
 # Dock Rotate /L Unleashed :: Change Log
 
+* 2018-1116: 1.5.1.19 (peteletroll) for KSP 1.4.3.
+	+ NodeRotate now works when attached to physicsless parts too (it actually converts them to full physics parts).
+	+ And a new motor part by Psycho_zs.
 * 2018-1112: 1.5.1.18 (peteletroll) for KSP 1.4.3.
 	+ No changelog provided
 * 2018-1102: 1.5.1.17 (peteletroll) for KSP 1.4.3.
