@@ -28,8 +28,6 @@ namespace DockRotate
 {
 	public class JointLockStateProxy: PartModule, IJointLockState
 	{
-		public bool verboseEvents = true;
-
 		private List<IJointLockState> tgt = null;
 
 		public static void register(Part p, IJointLockState jls)
@@ -47,7 +45,7 @@ namespace DockRotate
 			PartModule pm_jlsp = p.gameObject.GetComponent<JointLockStateProxy>();
 			if (!pm_jlsp) {
 				pm_jlsp = p.AddModule(nameof(JointLockStateProxy));
-				log(nameof(JointLockStateProxy), ".get(" + p.desc() + ") created " + pm_jlsp);
+				Log.trace(nameof(JointLockStateProxy), ".get({0}) created {1}", p.desc(), pm_jlsp);
 			}
 			JointLockStateProxy jlsp = pm_jlsp as JointLockStateProxy;
 			jlsp.enabled = false;
@@ -59,7 +57,7 @@ namespace DockRotate
 			if (tgt == null)
 				tgt = new List<IJointLockState>();
 			if (tgt.Contains(jls)) {
-				log(desc(), ".add(): skip adding duplicate");
+				Log.trace(desc(), ".add(): skip adding duplicate");
 				return;
 			}
 			tgt.Add(jls);
@@ -67,7 +65,7 @@ namespace DockRotate
 
 		public void OnDestroy()
 		{
-			log(desc(), ".OnDestroy()");
+			Log.trace(desc(), ".OnDestroy()");
 		}
 
 		public bool IsJointUnlocked()
@@ -77,19 +75,13 @@ namespace DockRotate
 				for (int i = 0; i < tgt.Count && !ret; i++)
 					if (tgt[i] != null && tgt[i].IsJointUnlocked())
 						ret = true;
-			if (verboseEvents || ret)
-				log(desc(), ".IsJointUnLocked() is " + ret);
+			Log.trace(desc(), ".IsJointUnLocked() is {0}", ret);
 			return ret;
 		}
 
 		public string desc(bool bare = false)
 		{
 			return (bare ? "" : "JLSP:") + (tgt == null ? 0 : tgt.Count) + ":" + part.desc(true);
-		}
-
-		protected static bool log(string msg1, string msg2 = "")
-		{
-			return Extensions.log(msg1, msg2);
 		}
 	}
 }

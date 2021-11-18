@@ -94,7 +94,7 @@ namespace DockRotate
 		private static Vessel cached_allAutostrutJoints_vessel = null;
 		private static int cached_allAutostrutJoints_frame = 0;
 
-		private static List<PartJoint> getAllAutostrutJoints(Vessel vessel, bool verbose)
+		private static List<PartJoint> getAllAutostrutJoints(Vessel vessel)
 		{
 			if (cached_allAutostrutJoints_vessel == vessel
 				&& cached_allAutostrutJoints_frame == Time.frameCount)
@@ -117,7 +117,7 @@ namespace DockRotate
 
 		/******** public interface ********/
 
-		public static void releaseCrossAutoStruts(this Part part, bool verbose)
+		public static void releaseCrossAutoStruts(this Part part)
 		{
 			if (!part.vessel || part.vessel.parts == null)
 				return;
@@ -136,8 +136,7 @@ namespace DockRotate
 						continue;
 					if (rotParts.contains(j.Host) != rotParts.contains(j.Target)
 						|| j.Host == part || j.Target == part) {
-						if (verbose)
-							log(part.desc() + ": releasing [" + ++count + "] " + j.desc());
+							Log.detail(part.desc(), ": releasing [{0}] {1}", ++count, j.desc());
 						j.DestroyJoint();
 						autoStruts.RemoveAt(ii);
 					}
@@ -145,11 +144,11 @@ namespace DockRotate
 			}
 		}
 
-		public static void releaseCrossAutoStruts_old(this Part part, bool verbose)
+		public static void releaseCrossAutoStruts_old(this Part part)
 		{
 			PartSet rotParts = PartSet.allPartsFromHere(part);
 
-			List<PartJoint> allAutostrutJoints = getAllAutostrutJoints(part.vessel, verbose);
+			List<PartJoint> allAutostrutJoints = getAllAutostrutJoints(part.vessel);
 
 			int count = 0;
 			for (int ii = 0; ii < allAutostrutJoints.Count; ii++) {
@@ -158,16 +157,10 @@ namespace DockRotate
 					continue;
 				if (rotParts.contains(j.Host) != rotParts.contains(j.Target)
 					|| j.Host == part || j.Target == part) {
-					if (verbose)
-						log(part.desc() + ": releasing [" + ++count + "] " + j.desc());
+					Log.detail(part.desc(), ": releasing [{0}] {1}", ++count, j.desc());
 					j.Host.ReleaseAutoStruts();
 				}
 			}
-		}
-
-		private static bool log(string msg1, string msg2 = "")
-		{
-			return Extensions.log(msg1, msg2);
 		}
 	}
 }

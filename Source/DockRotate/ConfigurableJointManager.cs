@@ -68,11 +68,11 @@ namespace DockRotate
 
 			tgtPos0 = joint.targetPosition;
 			if (tgtPos0 != Vector3.zero)
-				Extensions.log("JointManager: tgtPos0 = " + tgtPos0.desc());
+				Log.trace(nameof(ConfigurableJoint), ": tgtPos0 = {0}", tgtPos0.desc());
 
 			tgtRot0 = joint.targetRotation;
 			if (tgtRot0 != Quaternion.identity)
-				Extensions.log("JointManager: tgtRot0 = " + tgtRot0.desc());
+				Log.trace(nameof(ConfigurableJoint), ": tgtRot0 = {0}", tgtRot0.desc());
 		}
 
 		public void setRotation(float angle, Vector3 axis, Vector3 node)

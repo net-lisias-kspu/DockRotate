@@ -31,32 +31,6 @@ namespace DockRotate
 {
 	public static class Extensions
 	{
-		/******** logging ********/
-
-		private static int framelast = 0;
-		private static string msg1last = "";
-
-		public static bool log(string msg1, string msg2 = "")
-		{
-			int now = Time.frameCount;
-			if (msg2 == "") {
-				msg1last = "";
-			} else {
-				if (msg1 == msg1last && framelast == now) {
-					msg1 = "    ... ";
-				} else {
-					framelast = now;
-					msg1last = msg1;
-				}
-			}
-			Debug.Log("[DR:"
-#if DEBUG
-				+ "d:"
-#endif
-				+ now + "] " + msg1 + msg2);
-			return true;
-		}
-
 		/******** Vessel utilities ********/
 
 		public static string desc(this Vessel v, bool bare = false)
@@ -72,7 +46,7 @@ namespace DockRotate
 
 		public static void KJRNextCycleAllAutoStrut(this Vessel v)
 		{
-			log(v.desc(), ".KJRNextCycleAllAutoStrut()");
+			Log.trace(v.desc(), ".KJRNextCycleAllAutoStrut()");
 
 			const string pref = "KJRNext init";
 
@@ -82,10 +56,10 @@ namespace DockRotate
 					if (t != null && t.FullName == "KerbalJointReinforcement.KJRManager") {
 						KJRNextManagerType = t;
 						if (KJRNextManagerType != null) {
-							log(pref, ": found type " + KJRNextManagerType);
+							Log.trace(pref, ": found type {0}", KJRNextManagerType);
 							KJRNextCycleAllAutoStrutMethod = KJRNextManagerType.GetMethod("CycleAllAutoStrut");
 							if (KJRNextCycleAllAutoStrutMethod != null)
-								log(pref, ": found method " + KJRNextCycleAllAutoStrutMethod);
+								Log.trace(pref, ": found method {0}", KJRNextCycleAllAutoStrutMethod);
 						}
 					}
 				});
@@ -94,7 +68,7 @@ namespace DockRotate
 			if (KJRNextManagerType != null && KJRNextCycleAllAutoStrutMethod != null) {
 				object kjrnm = FlightGlobals.FindObjectOfType(KJRNextManagerType);
 				if (kjrnm != null) {
-					log(pref, ": found object " + kjrnm);
+					Log.trace(pref, ": found object {0}", kjrnm);
 					KJRNextCycleAllAutoStrutMethod.Invoke(kjrnm, new object[] { v });
 				}
 			}
@@ -133,22 +107,18 @@ namespace DockRotate
 
 		private static string autoStrutsField = "autoStrutJoints";
 		private static FieldInfo autoStrutsInfo = null;
-		public static List<PartJoint> autoStruts(this Part part, bool verbose = false)
+		public static List<PartJoint> autoStruts(this Part part)
 		{
-			if (verbose)
-				log(part.desc() + ".autoStruts(): begin");
+			Log.trace(part.desc(), ".autoStruts(): begin");
 			if (autoStrutsInfo == null)
 				autoStrutsInfo = typeof(Part).GetField(autoStrutsField, BindingFlags.NonPublic | BindingFlags.Instance);
 			if (autoStrutsInfo == null) {
-				log(part.desc() + ".autoStruts(): can't access Part." + autoStrutsField);
+				Log.trace(part.desc(), ".autoStruts(): can't access Part.{0}", autoStrutsField);
 				return null;
 			}
-			if (verbose)
-				log(part.desc() + ".autoStruts(): got FieldInfo " + autoStrutsInfo);
+			Log.trace(part.desc(),".autoStruts(): got FieldInfo {0}", autoStrutsInfo);
 			List<PartJoint> ret = autoStrutsInfo.GetValue(part) as List<PartJoint>;
-			if (verbose)
-				log(part.desc() + ".autoStruts(): got autoStrutJoints = "
-					+ (ret == null ? "null" : "[" + ret.Count + "]"));
+			Log.trace(part.desc(), ".autoStruts(): got autoStrutJoints = {0}", (ret == null ? "null" : ret.Count.ToString()));
 			if (ret != null && ret.Count <= 0)
 				ret = null;
 			return ret;
@@ -160,8 +130,7 @@ namespace DockRotate
 		{
 			bool ret = (part.physicalSignificance == Part.PhysicalSignificance.FULL);
 			if (ret != part.rb) {
-				log(part.desc(), ": hasPhysics() Rigidbody incoherency: "
-					+ part.physicalSignificance + ", " + (part.rb ? "rb ok" : "rb null"));
+				Log.warn(part.desc(), ": hasPhysics() Rigidbody incoherency: {0}. {1}", part.physicalSignificance,  (part.rb ? "rb ok" : "rb null"));
 				ret = part.rb;
 			}
 			return ret;
@@ -172,21 +141,19 @@ namespace DockRotate
 			if (!part || part.hasPhysics())
 				return false;
 
-			log(part.desc(), ": calling PromoteToPhysicalPart(), "
-				+ part.physicalSignificance + ", " + part.PhysicsSignificance);
+			Log.trace(part.desc(), ": calling PromoteToPhysicalPart(), {0}, {1}", part.physicalSignificance, part.PhysicsSignificance);
 			part.PromoteToPhysicalPart();
-			log(part.desc(), ": called PromoteToPhysicalPart(), "
-				+ part.physicalSignificance + ", " + part.PhysicsSignificance);
+			Log.trace(part.desc(), ": called PromoteToPhysicalPart(), {0}, {1}", part.physicalSignificance, part.PhysicsSignificance);
 			if (part.parent) {
 				if (part.attachJoint) {
-					log(part.desc(), ": parent joint exists already: " + part.attachJoint.desc());
+					Log.trace(part.desc(), ": parent joint exists already: {0}", part.attachJoint.desc());
 				} else {
 					AttachNode nodeHere = part.FindAttachNodeByPart(part.parent);
 					AttachNode nodeParent = part.parent.FindAttachNodeByPart(part);
 					AttachModes m = (nodeHere != null && nodeParent != null) ?
 						AttachModes.STACK : AttachModes.SRF_ATTACH;
 					part.CreateAttachJoint(m);
-					log(part.desc(), ": created joint " + m + " " + part.attachJoint.desc());
+					Log.trace(part.desc(), ": created joint {0} {1}", m, part.attachJoint.desc());
 				}
 			}
 
@@ -195,84 +162,80 @@ namespace DockRotate
 
 		/******** ModuleDockingNode utilities ********/
 
-		public static ModuleDockingNode getDockedNode(this ModuleDockingNode node, bool verbose)
+		public static ModuleDockingNode getDockedNode(this ModuleDockingNode node)
 		{
 			string label = node.part.desc();
 			ModuleDockingNode other = node.otherNode;
 			if (other) {
-				if (verbose)
-					log(label, ".getDockedNode(): other is " + other.part.desc());
+				Log.detail(label, ".getDockedNode(): other is {0}", other.part.desc());
 			}
 			if (!other && node.dockedPartUId > 0) {
 				other = node.FindOtherNode();
 				if (other) {
-					log(label, ".getDockedNode(): other found " + other.part.desc()
-						+ " with dockedPartUId = " + other.dockedPartUId
-						+ " from id = " + node.dockedPartUId);
+					Log.detail(label
+						, ".getDockedNode(): other found {0} with dockedPartUId = {1} from id = {2}"
+						, other.part.desc(), other.dockedPartUId, node.dockedPartUId
+					);
 				}
 			}
-			if (!other && verbose)
-				log(label, ".getDockedNode(): no other, id = " + node.dockedPartUId);
+			if (!other)
+				Log.detail(label, ".getDockedNode(): no other, id = {0}", node.dockedPartUId);
 			return other;
 		}
 
-		public static PartJoint getDockingJoint(this ModuleDockingNode node, bool verbose)
+		public static PartJoint getDockingJoint(this ModuleDockingNode node)
 		{
 			PartJoint ret = null;
 
-			ModuleDockingNode other = node.getDockedNode(verbose);
+			ModuleDockingNode other = node.getDockedNode();
 			if (!other)
 				return null;
 
 			PartJoint tmp = node.sameVesselDockJoint;
 			if (tmp && tmp.Target == other.part) {
-				if (verbose)
-					log(node.part.desc(), ".getDockingJoint(): to same vessel " + tmp.desc());
+				Log.detail(node.part.desc(), ".getDockingJoint(): to same vessel {0}", tmp.desc());
 				ret = tmp;
 			}
 
 			tmp = other.sameVesselDockJoint;
 			if (!ret && tmp && tmp.Target == node.part) {
-				if (verbose)
-					log(node.part.desc(), ".getDockingJoint(): from same vessel " + tmp.desc());
+				Log.detail(node.part.desc(), ".getDockingJoint(): from same vessel {0}", tmp.desc());
 				ret = tmp;
 			}
 
 			if (ret) {
-				tmp = ret.getTreeEquiv(verbose);
+				tmp = ret.getTreeEquiv();
 				if (tmp)
 					ret = tmp;
 			}
 
 			if (!ret && node.part.parent == other.part) {
 				ret = node.part.attachJoint;
-				if (verbose)
-					log(node.part.desc(), ".getDockingJoint(): to parent " + ret.desc());
+				Log.detail(node.part.desc(), ".getDockingJoint(): to parent {0}", ret.desc());
 			}
 
 			for (int i = 0; !ret && i < node.part.children.Count; i++) {
 				Part child = node.part.children[i];
 				if (child == other.part) {
 					ret = child.attachJoint;
-					if (verbose)
-						log(node.part.desc(), ".getDockingJoint(): to child " + ret.desc());
+					Log.detail(node.part.desc(), ".getDockingJoint(): to child {0}", ret.desc());
 				}
 			}
 
 			if (ret && other && !node.otherNode) {
-				log(node.part.desc(), ": setting otherNode = " + other.part.desc());
+				Log.detail(node.part.desc(), ": setting otherNode = {0}", other.part.desc());
 				node.otherNode = other; // this fixes a ModuleDockingNode bug
 				node.dockedPartUId = other.part.flightID;
 			}
 
 			if (!ret && node.dockedPartUId > 0) {
-				log(node.part.desc(), ": dockedPartUId = " + node.dockedPartUId + ", but no joint");
-				log(node.part.desc(), ": zeroing dockedPartUId = " + node.dockedPartUId);
+				Log.detail(node.part.desc(), ": dockedPartUId = {0}, but no joint", node.dockedPartUId);
+				Log.detail(node.part.desc(), ": zeroing dockedPartUId = {0}", node.dockedPartUId);
 				node.dockedPartUId = 0;
 			}
 
-			if (!ret && verbose)
-				log(node.part.desc(), ".getDockingJoint(): nothing");
+			if (!ret)
+				Log.detail(node.part.desc(), ".getDockingJoint(): nothing");
 
 			return ret;
 		}
@@ -300,9 +263,9 @@ namespace DockRotate
 			// this fills nodeTypes, sometimes empty in editor
 			if (node.nodeTypes != null && node.nodeTypes.Count > 0)
 				return;
-			log(node.part.desc(), ".fillNodeTypes(): fill with \"" + node.nodeType + "\"");
+			Log.detail(node.part.desc(), ".fillNodeTypes(): fill with \"{0}\"");
 			if (node.nodeTypes == null) {
-				log(node.part.desc(), ".fillNodeTypes(): creating HashSet");
+				Log.detail(node.part.desc(), ".fillNodeTypes(): creating HashSet");
 				node.nodeTypes = new HashSet<string>();
 			}
 			string[] types = node.nodeType.Split(',');
@@ -310,7 +273,7 @@ namespace DockRotate
 				string type = types[i].Trim();
 				if (type == "")
 					continue;
-				log(node.part.desc(), ".fillNodeTypes(): adding \"" + type + "\" [" + i + "]");
+				Log.detail(node.part.desc(), ".fillNodeTypes(): adding \"{0}\" [{1}]", type, i);
 				node.nodeTypes.Add(type);
 			}
 		}
@@ -329,18 +292,16 @@ namespace DockRotate
 
 		/******** AttachNode utilities ********/
 
-		public static AttachNode getConnectedNode(this AttachNode node, bool verbose)
+		public static AttachNode getConnectedNode(this AttachNode node)
 		{
-			if (verbose)
-				log(node.desc(), ".getConnectedNode()");
+			Log.trace(node.desc(), ".getConnectedNode()");
 
 			if (node == null || !node.owner)
 				return null;
 
 			AttachNode fon = node.FindOpposingNode();
 			if (fon != null) {
-				if (verbose)
-					log(node.desc(), ".getConnectedNode(): FindOpposingNode() finds " + fon.desc());
+				Log.trace(node.desc(), ".getConnectedNode(): FindOpposingNode() finds {0}", fon.desc());
 				return fon;
 			}
 
@@ -352,9 +313,7 @@ namespace DockRotate
 					neighbours.Add(node.owner.parent);
 				neighbours.AddRange(node.owner.children);
 			}
-			if (verbose)
-				log(node.desc(), ".getConnectedNode(): " + node.owner.desc()
-					+ " has " + neighbours.Count + " neighbours");
+			Log.trace(node.desc(), ".getConnectedNode(): {0} has {1} neighbours", node.owner.desc(), neighbours.Count);
 
 			AttachNode closest = null;
 			float dist = 0f;
@@ -362,21 +321,18 @@ namespace DockRotate
 				if (neighbours[i] == null)
 					continue;
 				List<AttachNode> n = neighbours[i].attachNodes;
-				if (verbose)
-					log(node.desc(), ".getConnectedNode(): " + neighbours[i] + " has " + n.Count + " nodes");
+				Log.trace(node.desc(), ".getConnectedNode(): {0} has {1} nodes", neighbours[i], n.Count);
 
 				for (int j = 0; j < n.Count; j++) {
 					float d = node.distFrom(n[j]);
-					if (verbose)
-						log(node.desc(), ".getConnectedNode(): " + n[j].desc() + " at " + d);
+					Log.detail(node.desc(), ".getConnectedNode(): {0} at {1}", n[j].desc(), d);
 					if (d < dist || closest == null) {
 						closest = n[j];
 						dist = d;
 					}
 				}
 			}
-			if (verbose)
-				log(node.desc(), ".getConnectedNode(): found " + closest.desc() + " at " + dist);
+			Log.detail(node.desc(), ".getConnectedNode(): found {0} at {1}", closest.desc(), dist);
 
 			if (closest == null || dist > 1e-2f)
 				return null;
@@ -427,7 +383,7 @@ namespace DockRotate
 				: true;
 		}
 
-		public static PartJoint getTreeEquiv(this PartJoint j, bool verbose)
+		public static PartJoint getTreeEquiv(this PartJoint j)
 		{
 			if (!j)
 				return null;
@@ -436,9 +392,8 @@ namespace DockRotate
 				j.sameParts(j.Target.attachJoint) ? j.Target.attachJoint :
 				null;
 
-			if (ret && verbose)
-				log(j.desc(), ".getTreeEquiv(): " + j.desc()
-					+ " overruled by " + ret.desc());
+			if (ret)
+				Log.detail(j.desc(), ".getTreeEquiv(): {0} overruled by {1}", j.desc(), ret.desc());
 
 			return ret;
 		}
@@ -456,14 +411,13 @@ namespace DockRotate
 
 		public static void dump(this PartJoint j)
 		{
-			log("PartJoint " + j.desc());
-			log("jAxes: " + j.Axis.desc() + " " + j.SecAxis.desc());
-			log("jAxes(rb): " + j.Axis.Td(j.Host.T(), j.Target.rb.T()).desc()
-				+ ", " + j.SecAxis.Td(j.Host.T(), j.Target.rb.T()).desc());
-			log("jAnchors: " + j.HostAnchor.desc() + " " + j.TgtAnchor.desc());
+			Log.force("PartJoint {0}", j.desc());
+			Log.force("jAxes: {0} {1}", j.Axis.desc(), j.SecAxis.desc());
+			Log.force("jAxes(rb): {0}, {1}", j.Axis.Td(j.Host.T(), j.Target.rb.T()).desc(), j.SecAxis.Td(j.Host.T(), j.Target.rb.T()).desc());
+			Log.force("jAnchors: {0} {1}", j.HostAnchor.desc(), j.TgtAnchor.desc());
 
 			for (int i = 0; i < j.joints.Count; i++) {
-				log("ConfigurableJoint[" + i + "]:");
+				Log.force("ConfigurableJoint[{0}]:", i);
 				j.joints[i].dump();
 			}
 		}
@@ -483,16 +437,11 @@ namespace DockRotate
 
 		public static void dump(this ConfigurableJoint j)
 		{
-			log("  Link: " + j.gameObject + " to " + j.connectedBody);
-			log("  Axes: " + j.axis.desc() + ", " + j.secondaryAxis.desc());
-			log("  Axes(rb): " + j.axis.Td(j.T(), j.connectedBody.T()).desc()
-				+ ", " + j.secondaryAxis.Td(j.T(), j.connectedBody.T()).desc());
-
-			log("  Anchors: " + j.anchor.desc()
-				+ " -> " + j.connectedAnchor.desc()
-				+ " [" + j.connectedAnchor.Tp(j.connectedBody.T(), j.T()).desc() + "]");
-
-			log("  Tgt: " + j.targetPosition.desc() + ", " + j.targetRotation.desc());
+			Log.force("  Link: {0} to {1}", j.gameObject, j.connectedBody);
+			Log.force("  Axes: {0}, {1}", j.axis.desc(), j.secondaryAxis.desc());
+			Log.force("  Axes(rb): {0}, {1}", j.axis.Td(j.T(), j.connectedBody.T()).desc(), j.secondaryAxis.Td(j.T(), j.connectedBody.T()).desc());
+			Log.force("  Anchors: {0} -> {1} [{2}]", j.anchor.desc(), j.connectedAnchor.desc(), j.connectedAnchor.Tp(j.connectedBody.T(), j.T()).desc());
+			Log.force("  Tgt: {0}, {1}", j.targetPosition.desc(), j.targetRotation.desc());
 
 			/*
 			log("  angX: " + desc(j.angularXMotion, j.angularXDrive, j.lowAngularXLimit, j.angularXLimitSpring));

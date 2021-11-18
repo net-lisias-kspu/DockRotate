@@ -66,7 +66,7 @@ namespace DockRotate
 
 			lastLoaded = null;
 			try {
-				log("loading " + configFile());
+				Log.trace(nameof(DockingStateChecker), "loading {0}", configFile());
 				ConfigNode cn = ConfigNode.Load(configFile());
 				if (cn == null)
 					throw new Exception("null ConfigNode");
@@ -76,12 +76,11 @@ namespace DockRotate
 				lastLoaded = fromConfigNode(cn);
 				lastLoadedAt = Time.frameCount;
 				if (lastLoaded.enabledCheck)
-					log("loaded\n" + lastLoaded.desc() + "\n");
+					Log.trace(nameof(DockingStateChecker), "loaded {0}", lastLoaded.desc());
 				else
-					log("loaded, check disabled");
+					Log.trace(nameof(DockingStateChecker), "loaded, check disabled");
 			} catch (Exception e) {
-				log("can't load: " + e.Message + "\n" + e.StackTrace);
-				log("using builtin configuration");
+				Log.error(e, "can't load using builtin configuration");
 				lastLoaded = builtin();
 				if (!System.IO.File.Exists(configFile()))
 					lastLoaded.save();
@@ -96,16 +95,16 @@ namespace DockRotate
 				string file = configFile();
 				string directory = System.IO.Path.GetDirectoryName(file);
 				if (!System.IO.Directory.Exists(directory)) {
-					log("creating directory " + directory);
+					Log.trace(nameof(DockingStateChecker), "creating directory " + directory);
 					System.IO.Directory.CreateDirectory(directory);
 				}
 				ConfigNode cn = new ConfigNode("root");
 				cn.AddNode(toConfigNode());
-				log("saving " + file);
+				Log.trace(nameof(DockingStateChecker), "saving {0}", file);
 				cn.Save(file);
 				ret = true;
 			} catch (Exception e) {
-				log("can't save: " + e.Message + "\n" + e.StackTrace);
+				Log.error("can't save: {0}", e.Message);
 			}
 			return ret;
 		}
@@ -115,7 +114,7 @@ namespace DockRotate
 			DockingStateChecker ret = new DockingStateChecker();
 			ret.nodeStates.AddRange(allowedNodeStates);
 			ret.jointStates.AddRange(allowedJointStates);
-			log("builtin\n" + ret.desc());
+			Log.trace("builtin {0}", ret.desc());
 			return ret;
 		}
 
@@ -211,7 +210,7 @@ namespace DockRotate
 				return null;
 			NodeState ret = null;
 			string nodeState = S(node);
-			PartJoint joint = node.getDockingJoint(false);
+			PartJoint joint = node.getDockingJoint();
 			bool hasJoint = joint;
 			bool isSameVessel = joint && joint.isOffTree();
 			for (int i = 0; i < nodeStates.Count; i++) {
@@ -288,7 +287,7 @@ namespace DockRotate
 				result.msg("has no ModuleDockRotate");
 			}
 
-			PartJoint joint = node.getDockingJoint(verbose);
+			PartJoint joint = node.getDockingJoint();
 			if (joint)
 				checkDockingJoint(result, node, joint);
 
@@ -297,7 +296,7 @@ namespace DockRotate
 					(joint.isOffTree() ? " with same vessel joint" : " with tree joint") :
 					" without joint");
 
-			if (node.sameVesselDockJoint && node.sameVesselDockJoint.getTreeEquiv(false)) {
+			if (node.sameVesselDockJoint && node.sameVesselDockJoint.getTreeEquiv()) {
 				result.err("redundant same vessel joint " + info(node.sameVesselDockJoint));
 				flash(result, node.part, colorBad);
 				if (enabledRedundantSameVesselUndock) {
@@ -381,7 +380,7 @@ namespace DockRotate
 				for (int i = 0; i < msgList.Count; i++)
 					report.AppendLine(msgList[i]);
 				report.Append(new string('#', 80));
-				log(report.ToString());
+				Log.detail(nameof(DockingStateChecker), report.ToString());
 			}
 
 			private HashSet<string> chk = new HashSet<string>();
@@ -653,7 +652,7 @@ namespace DockRotate
 				return;
 			}
 
-			ModuleDockingNode other = node.getDockedNode(false);
+			ModuleDockingNode other = node.getDockedNode();
 			if (!other) {
 				result.err("no other node");
 				flash(result, node.part, colorBad);
@@ -768,11 +767,6 @@ namespace DockRotate
 		{
 			yield return new WaitForSeconds(waitSeconds);
 			p.SetHighlightDefault();
-		}
-
-		private static bool log(string msg)
-		{
-			return Extensions.log("[" + nameof(DockingStateChecker) + "] " + msg);
 		}
 	}
 }

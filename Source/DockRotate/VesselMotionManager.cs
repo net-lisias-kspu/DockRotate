@@ -41,9 +41,9 @@ namespace DockRotate
 			if (!v)
 				return null;
 			if (!v.loaded)
-				log(nameof(VesselMotionManager), ".get(" + v.desc() + ") called on unloaded vessel");
+				Log.warn(nameof(VesselMotionManager), ".get({0}) called on unloaded vessel", v.desc());
 			if (!v.rootPart)
-				log(nameof(VesselMotionManager), ".get(" + v.desc() + ") called on rootless vessel");
+				Log.warn(nameof(VesselMotionManager), ".get({0}) called on rootless vessel", v.desc());
 
 			VesselMotionManager mgr = null;
 			VesselMotionManager[] mgrs = v.GetComponents<VesselMotionManager>();
@@ -52,7 +52,7 @@ namespace DockRotate
 					if (mgrs[i].vessel == v && mgrs[i].rootPart == v.rootPart && !mgr) {
 						mgr = mgrs[i];
 					} else {
-						log(nameof(VesselMotionManager), ".get(" + v.desc() + ") found incoherency with " + mgrs[i].desc());
+						Log.warn(nameof(VesselMotionManager), ".get({0}) found incoherency with {1}", v.desc() , mgrs[i].desc());
 						Destroy(mgrs[i]);
 					}
 				}
@@ -62,7 +62,7 @@ namespace DockRotate
 				mgr = v.gameObject.AddComponent<VesselMotionManager>();
 				mgr.vessel = v;
 				mgr.rootPart = v.rootPart;
-				log(nameof(VesselMotionManager), ".get(" + v.desc() + ") created " + mgr.desc());
+				Log.detail(nameof(VesselMotionManager), ".get({0}) created {1}", v.desc(), mgr.desc());
 			}
 
 			return mgr;
@@ -71,7 +71,7 @@ namespace DockRotate
 		public void resetRotCount()
 		{
 			if (rotCount != 0)
-				log(desc(), ".resetRotCount(): " + rotCount + " -> RESET");
+				Log.trace(desc(), ".resetRotCount(): {0} -> RESET", rotCount);
 			rotCount = 0;
 		}
 
@@ -82,20 +82,19 @@ namespace DockRotate
 				ret = 0;
 
 			if (rotCount == 0 && delta > 0)
-				phase("START");
+				Log.trace(desc(), "START");
 
 			if (delta != 0)
-				log(desc(), ".changeCount(" + delta + "): "
-					+ rotCount + " -> " + ret);
+				Log.warn(desc(), ".changeCount({0}): {1} -> {2}", delta, rotCount, ret);
 
 			if (ret == 0 && rotCount > 0) {
-				log(desc(), ": securing autostruts");
+				Log.detail(desc(), ": securing autostruts");
 				vessel.CycleAllAutoStrut();
 				vessel.KJRNextCycleAllAutoStrut();
 			}
 
 			if (ret == 0 && delta < 0)
-				phase("STOP");
+				Log.trace(desc(), "STOP");
 
 			return rotCount = ret;
 		}
@@ -105,7 +104,7 @@ namespace DockRotate
 			if (!vessel) {
 				vessel = gameObject.GetComponent<Vessel>();
 				if (vessel)
-					log(desc(), ".Awake(): found vessel");
+					Log.detail(desc(), ".Awake(): found vessel");
 			}
 		}
 
@@ -114,7 +113,7 @@ namespace DockRotate
 			if (!vessel) {
 				vessel = gameObject.GetComponent<Vessel>();
 				if (vessel)
-					log(desc(), ".Start(): found vessel");
+					Log.detail(desc(), ".Start(): found vessel");
 			}
 			setEvents(true);
 			enabled = false;
@@ -123,7 +122,7 @@ namespace DockRotate
 		public void OnDestroy()
 		{
 			setEvents(false);
-			log(desc(), ".OnDestroy()");
+			Log.trace(desc(), ".OnDestroy()");
 		}
 
 		private bool eventState = false;
@@ -146,7 +145,7 @@ namespace DockRotate
 		{
 			if (v != vessel)
 				return;
-			log(desc(), ".onActiveJointNeedUpdate(" + v.desc() + ")");
+			Log.trace(desc(), ".onActiveJointNeedUpdate({0})", v.desc());
 		}
 
 		public void scheduleDockingStatesCheck(bool verbose)
@@ -170,10 +169,9 @@ namespace DockRotate
 				yield return new WaitForFixedUpdate();
 
 			if (thisCounter < dockingCheckCounter) {
-				log("skipping analysis, another pending");
+				Log.trace(desc(), "skipping analysis, another pending");
 			} else {
-				log((verbose ? "verbosely " : "")
-					+ "analyzing incoherent states in " + vessel.GetName());
+				Log.trace(desc(), "{0} analyzing incoherent states in {1}", (verbose ? "verbosely " : ""), vessel.GetName());
 				DockingStateChecker.Result result = checker.checkVessel(vessel, verbose);
 				if (result.foundError)
 					ScreenMessages.PostScreenMessage(Localizer.Format("#DCKROT_bad_states"),
@@ -184,17 +182,6 @@ namespace DockRotate
 		private string desc()
 		{
 			return "VMM:" + GetInstanceID() + ":" + vessel.desc(true);
-		}
-
-		private void phase(string msg, bool force = false)
-		{
-			if (force)
-				log(desc() + ": --- " + msg + " " + new string('-', 60 - msg.Length));
-		}
-
-		private static bool log(string msg1, string msg2 = "")
-		{
-			return Extensions.log(msg1, msg2);
 		}
 	}
 }

@@ -98,10 +98,10 @@ namespace DockRotate
 		)]
 		public void CheckDockingState()
 		{
-			log(part.desc(), ": DOCKING STATE CHECK");
+			Log.trace(part.desc(), ": DOCKING STATE CHECK");
 
 			if (!dockingNode) {
-				log(part.desc(), ": no dockingNode");
+				Log.trace(part.desc(), ": no dockingNode");
 				return;
 			}
 
@@ -118,7 +118,7 @@ namespace DockRotate
 				evt.guiActive = active || DEBUGMODE;
 				// log(desc(), ".showCheckDockingState(" + active + "): done");
 			} else {
-				log(desc(), ".showCheckDockingState(" + active + "): can't find event");
+				Log.trace(desc(), ".showCheckDockingState({0}): can't find event", active);
 			}
 		}
 
@@ -128,43 +128,32 @@ namespace DockRotate
 			storedInfo = Localizer.Format("#DCKROT_port_info");
 		}
 
-		protected override AttachNode findMovingNodeInEditor(out Part otherPart, bool verbose)
+		protected override AttachNode findMovingNodeInEditor(out Part otherPart)
 		{
 			otherPart = null;
 			if (!dockingNode || dockingNode.referenceNode == null)
 				return null;
-			if (verbose)
-				log(desc(), ".findMovingNodeInEditor(): referenceNode = " + dockingNode.referenceNode.desc());
-			AttachNode otherNode = dockingNode.referenceNode.getConnectedNode(verboseSetup);
-			if (verbose)
-				log(desc(), ".findMovingNodeInEditor(): otherNode = " + otherNode.desc());
+			Log.trace(desc(), ".findMovingNodeInEditor(): referenceNode = {0}", dockingNode.referenceNode.desc());
+			AttachNode otherNode = dockingNode.referenceNode.getConnectedNode();
+			Log.trace(desc(), ".findMovingNodeInEditor(): otherNode = {0}", otherNode.desc());
 			if (otherNode == null)
 				return null;
 			otherPart = otherNode.owner;
-			if (verbose)
-				log(desc(), ".findMovingNodeInEditor(): otherPart = " + otherPart.desc());
+			Log.trace(desc(), ".findMovingNodeInEditor(): otherPart = {0}", otherPart.desc());
 			if (!otherPart)
 				return null;
 			ModuleDockingNode otherDockingNode = otherPart.FindModuleImplementing<ModuleDockingNode>();
-			if (verbose)
-				log(desc(), ".findMovingNodeInEditor(): otherDockingNode = "
-					+ (otherDockingNode ? otherDockingNode.part.desc() : "null"));
+			Log.trace(desc(), ".findMovingNodeInEditor(): otherDockingNode = {0}", (otherDockingNode ? otherDockingNode.part.desc() : "null"));
 			if (!otherDockingNode)
 				return null;
-			if (verbose)
-				log(desc(), ".findMovingNodeInEditor(): otherDockingNode.referenceNode = "
-					+ otherDockingNode.referenceNode.desc());
+			Log.detail(desc(), ".findMovingNodeInEditor(): otherDockingNode.referenceNode = {0}", otherDockingNode.referenceNode.desc());
 			if (otherDockingNode.referenceNode == null)
 				return null;
 			if (!otherDockingNode.matchType(dockingNode)) {
-				if (verbose)
-					log(desc(), ".findMovingNodeInEditor(): mismatched node types "
-						+ dockingNode.nodeType + " != " + otherDockingNode.nodeType);
+				Log.trace(desc(), ".findMovingNodeInEditor(): mismatched node types {0} != {1}", dockingNode.nodeType, otherDockingNode.nodeType);
 				return null;
 			}
-			if (verbose)
-				log(desc(), ".findMovingNodeInEditor(): node test is "
-					+ (otherDockingNode.referenceNode.FindOpposingNode() == dockingNode.referenceNode));
+			Log.trace(desc(), ".findMovingNodeInEditor(): node test is {0}", (otherDockingNode.referenceNode.FindOpposingNode() == dockingNode.referenceNode));
 
 			return dockingNode.referenceNode;
 		}
@@ -174,36 +163,31 @@ namespace DockRotate
 			dockingNode = part.FindModuleImplementing<ModuleDockingNode>();
 
 			if (!dockingNode) {
-				log(desc(), ".setupLocalAxis(" + state + "): no docking node");
+				Log.trace(desc(), ".setupLocalAxis({0}): no docking node", state);
 				return false;
 			}
 
 			partNodePos = Vector3.zero.Tp(dockingNode.T(), part.T());
 			partNodeAxis = Vector3.forward.Td(dockingNode.T(), part.T());
-			if (verboseSetup)
-				log(desc(), ".setupLocalAxis(" + state + ") done: "
-					+ partNodeAxis + "@" + partNodePos);
+			Log.trace(desc(), ".setupLocalAxis({0}) done: {1}@{2}", state, partNodeAxis, partNodePos);
 			return true;
 		}
 
-		protected override PartJoint findMovingJoint(bool verbose)
+		protected override PartJoint findMovingJoint()
 		{
 			if (!dockingNode || !dockingNode.part) {
-				if (verbose)
-					log(desc(), ".findMovingJoint(): no docking node");
+				Log.trace(desc(), ".findMovingJoint(): no docking node");
 				return null;
 			}
 
-			ModuleDockingNode other = dockingNode.getDockedNode(verbose);
+			ModuleDockingNode other = dockingNode.getDockedNode();
 			if (!other || !other.part) {
-				if (verbose)
-					log(desc(), ".findMovingJoint(): no other, id = " + dockingNode.dockedPartUId);
+				Log.trace(desc(), ".findMovingJoint(): no other, id = {0}", dockingNode.dockedPartUId);
 				return null;
 			}
 
 			if (!dockingNode.matchType(other)) {
-				if (verbose)
-					log(desc(), ".findMovingJoint(): mismatched node types");
+				Log.trace(desc(), ".findMovingJoint(): mismatched node types");
 				return null;
 			}
 
@@ -211,11 +195,11 @@ namespace DockRotate
 			if (otherModule) {
 				if (!smartAutoStruts && otherModule.smartAutoStruts) {
 					smartAutoStruts = true;
-					log(desc(), ".findMovingJoint(): smartAutoStruts activated by " + otherModule.desc());
+					Log.trace(desc(), ".findMovingJoint(): smartAutoStruts activated by {0}", otherModule.desc());
 				}
 			}
 
-			return dockingNode.getDockingJoint(verbose);
+			return dockingNode.getDockingJoint();
 		}
 
 		private static bool consoleSetupDone = false;
@@ -243,9 +227,9 @@ namespace DockRotate
 
 #if DEBUG
 			if (dockingNode) {
-				log("[ModuleDockingNode] Part: " + part.name + "-" + part.persistentId
-					+ " FSM Start State " + dockingNode.state
-					+ " in ModuleDockRotate.doSetup(" + part.flightID + ")");
+				Log.detail(nameof(ModuleDockRotate), "Part: {0}-{1} FSM Start State {2} in ModuleDockRotate.doSetup({3})"
+						, part.name, part.persistentId, dockingNode.state, part.flightID
+					);
 				dockingNode.DebugFSMState = true;
 			}
 #endif
@@ -254,24 +238,21 @@ namespace DockRotate
 				isDocked = hasJointMotion;
 			} else if (isDocked != hasJointMotion) {
 				isDocked = hasJointMotion;
-				log(desc(), ": new docked state " + isDocked);
+				Log.trace(desc(), ": new docked state {0}", isDocked);
 			}
 
 			if (hasJointMotion && jointMotion.joint.Host == part && !frozenFlag) {
 				float snap = autoSnapStep();
-				if (verboseSetup)
-					log(desc(), ".autoSnapStep() = " + snap);
+				Log.detail(desc(), ".autoSnapStep() = {0}", snap);
 				ModuleDockRotate other = jointMotion.joint.Target.FindModuleImplementing<ModuleDockRotate>();
 				if (other) {
 					float otherSnap = other.autoSnapStep();
-					if (verboseSetup)
-						log(other.desc(), ".autoSnapStep() = " + otherSnap);
+					Log.detail(other.desc(), ".autoSnapStep() = {0}", otherSnap);
 					if (otherSnap > 0f && (snap.isZero() || otherSnap < snap))
 						snap = otherSnap;
 				}
 				if (!snap.isZero() && !onLaunch) {
-					if (verboseSetup)
-						log(jointMotion.desc(), ": autosnap at " + snap);
+					Log.detail(jointMotion.desc(), ": autosnap at {0}", snap);
 					enqueueFrozenRotation(jointMotion.angleToSnap(snap), 5f);
 				}
 			}
@@ -284,14 +265,13 @@ namespace DockRotate
 			return node.IsRotating || !node.targetAngle.isZero();
 		}
 
-		protected override bool canStartRotation(bool verbose, bool ignoreDisabled = false)
+		protected override bool canStartRotation(bool ignoreDisabled = false)
 		{
 			if (usingStockRotation(dockingNode) || usingStockRotation(dockingNode.otherNode)) {
-				if (verbose)
-					log(desc(), ".canStartRotation(): disabled, using stock rotation");
+				Log.trace(desc(), ".canStartRotation(): disabled, using stock rotation");
 				return false;
 			}
-			return base.canStartRotation(verbose, ignoreDisabled);
+			return base.canStartRotation(ignoreDisabled);
 		}
 
 		protected override void updateStatus(JointMotionObj cr)
@@ -315,8 +295,7 @@ namespace DockRotate
 				step = rotationStep;
 				source = "rotationStep";
 			}
-			if (verboseSetup)
-				log(desc(), ".autoSnapStep() = " + step + " from " + source);
+			Log.trace(desc(), ".autoSnapStep() = {0} from {1}", step, source);
 			if (step >= 360f)
 				step = 0f;
 			return step;
@@ -332,15 +311,15 @@ namespace DockRotate
 		{
 			string d = desc();
 			if (dockingNode) {
-				log(d, ": attachJoint: " + part.attachJoint.desc());
-				log(d, ": dockedPartUId: " + dockingNode.dockedPartUId);
-				log(d, ": dockingNode state: \"" + dockingNode.state + "\"");
-				log(d, ": sameVesselDockingJoint: " + dockingNode.sameVesselDockJoint.desc());
-				log(d, ": stock rotation: " + dockingNode.IsRotating + " " + dockingNode.targetAngle);
-				log(d, ": vesselInfo = " + dockingNode.vesselInfo.desc());
-				log(d, ": canRotateDefault() = " + canRotateDefault());
+				Log.dbg("{0}: attachJoint: {1}", d, part.attachJoint.desc());
+				Log.dbg("{0}: dockedPartUId: {1}", d, dockingNode.dockedPartUId);
+				Log.dbg("{0}: dockingNode state: \"{1}\"", d, dockingNode.state);
+				Log.dbg("{0}: sameVesselDockingJoint: {1}", d, dockingNode.sameVesselDockJoint.desc());
+				Log.dbg("{0}: stock rotation: {1} {2}", d, dockingNode.IsRotating, dockingNode.targetAngle);
+				Log.dbg("{0}: vesselInfo = {1}", d, dockingNode.vesselInfo.desc());
+				Log.dbg("{0}: canRotateDefault() = {1}", d, canRotateDefault());
 			} else {
-				log(d, ": no dockingNode");
+				Log.dbg("{0}: no dockingNode", d);
 			}
 		}
 #endif
@@ -365,7 +344,7 @@ namespace DockRotate
 					throw new Exception("illegal command");
 				}
 			} catch (Exception e) {
-				log("ERROR: " + e.Message);
+				Log.error(e, typeof(ModuleDockRotate));
 			}
 			// log("CMD END");
 		}

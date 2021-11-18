@@ -57,20 +57,17 @@ namespace DockRotate
 			// TODO: change groupDisplayName to "NodeRotate <node name>"
 		}
 
-		protected override AttachNode findMovingNodeInEditor(out Part otherPart, bool verbose)
+		protected override AttachNode findMovingNodeInEditor(out Part otherPart)
 		{
 			otherPart = null;
 			if (rotatingNode == null)
 				return null;
-			if (verbose)
-				log(desc(), ".findMovingNodeInEditor(): rotatingNode = " + rotatingNode.desc());
+			Log.detail(desc(), ".findMovingNodeInEditor(): rotatingNode = {0}", rotatingNode.desc());
 			otherPart = rotatingNode.attachedPart;
-			if (verbose)
-				log(desc(), ".findMovingNodeInEditor(): otherPart = " + otherPart.desc());
+			Log.detail(desc(), ".findMovingNodeInEditor(): otherPart = {0}", otherPart.desc());
 			if (!otherPart)
 				return null;
-			if (verbose)
-				log(desc(), ".findMovingNodeInEditor(): attachedPart = " + rotatingNode.attachedPart.desc());
+			Log.detail(desc(), ".findMovingNodeInEditor(): attachedPart = {0}", rotatingNode.attachedPart.desc());
 			return rotatingNode;
 		}
 
@@ -81,79 +78,67 @@ namespace DockRotate
 				rotatingNode = part.srfAttachNode;
 
 			if (rotatingNode == null) {
-				log(desc(), ".setupLocalAxis(" + state + "): "
-					+ "no node \"" + rotatingNodeName + "\"");
+				Log.detail(desc(), ".setupLocalAxis({0}): " + "no node \"{1}\"", state, rotatingNodeName);
 
 				List<AttachNode> nodes = part.allAttachNodes();
 				for (int i = 0; i < nodes.Count; i++)
-					log(desc(), ": node[" + i + "] = " + nodes[i].desc());
+					Log.detail(desc(), ": node[{0}] = {1}", i, nodes[i].desc());
 				return false;
 			}
 
 			partNodePos = rotatingNode.position;
 			partNodeAxis = rotatingNode.orientation;
-			if (verboseSetup)
-				log(desc(), ".setupLocalAxis(" + state + ") done: "
-					+ partNodeAxis + "@" + partNodePos);
+			Log.detail(desc(), ".setupLocalAxis({0}) done: {1}@{2}", state, partNodeAxis, partNodePos);
 			return true;
 		}
 
-		protected override PartJoint findMovingJoint(bool verbose)
+		protected override PartJoint findMovingJoint()
 		{
 			uint prevOtherPartFlightID = otherPartFlightID;
 			otherPartFlightID = 0;
 
 			if (rotatingNode == null || !rotatingNode.owner) {
-				if (verbose)
-					log(desc(), ".findMovingJoint(): no node");
+				Log.trace(desc(), ".findMovingJoint(): no node");
 				return null;
 			}
 
 			if (part.FindModuleImplementing<ModuleDockRotate>()) {
-				log(desc(), ".findMovingJoint(): has DockRotate, NodeRotate disabled");
+				Log.trace(desc(), ".findMovingJoint(): has DockRotate, NodeRotate disabled");
 				return null;
 			}
 
 			Part owner = rotatingNode.owner;
 			Part other = rotatingNode.attachedPart;
 			if (!other) {
-				if (verbose)
-					log(desc(), ".findMovingJoint(" + rotatingNode.id + "): attachedPart is null, try by id = "
-						+ prevOtherPartFlightID);
+				Log.trace(desc(), ".findMovingJoint({0}): attachedPart is null, try by id = {1}", rotatingNode.id, prevOtherPartFlightID);
 				other = findOtherById(prevOtherPartFlightID);
 			}
 			if (!other) {
-				if (verbose)
-					log(desc(), ".findMovingJoint(" + rotatingNode.id + "): no attachedPart");
+				Log.trace(desc(), ".findMovingJoint({0}): no attachedPart", rotatingNode.id);
 				return null;
 			}
-			if (verbose && other.flightID != prevOtherPartFlightID)
-				log(desc(), ".findMovingJoint(" + rotatingNode.id + "): otherFlightID "
-					+ prevOtherPartFlightID + " -> " + other.flightID);
-			if (verbose)
-				log(desc(), ".findMovingJoint(" + rotatingNode.id + "): attachedPart is " + other.desc());
+			if (other.flightID != prevOtherPartFlightID)
+				Log.trace(desc(), ".findMovingJoint({0}): otherFlightID {1} -> {2}", rotatingNode.id, prevOtherPartFlightID,  other.flightID);
+			Log.trace(desc(), ".findMovingJoint({0}): attachedPart is {1}", rotatingNode.id, other.desc());
 			other.forcePhysics();
 			if (enableJointMotionProxy && HighLogic.LoadedSceneIsFlight)
 				JointLockStateProxy.register(other, this);
 
 			if (owner.parent == other) {
 				PartJoint ret = owner.attachJoint;
-				if (verbose)
-					log(desc(), ".findMovingJoint(" + rotatingNode.id + "): child " + ret.desc());
+				Log.detail(desc(), ".findMovingJoint({0}): child {1}", rotatingNode.id, ret.desc());
 				otherPartFlightID = other.flightID;
 				return ret;
 			}
 
 			if (other.parent == owner) {
 				PartJoint ret = other.attachJoint;
-				if (verbose)
-					log(desc(), ".findMovingJoint(" + rotatingNode.id + "): parent " + ret.desc());
+				Log.detail(desc(), ".findMovingJoint({0}): parent {1}", rotatingNode.id, ret.desc());
 				otherPartFlightID = other.flightID;
 				return ret;
 			}
 
-			if (verbose)
-				log(desc(), ".findMovingJoint(" + rotatingNode.id + "): nothing");
+			Log.trace(desc(), ".findMovingJoint({0}): nothing", rotatingNode.id);
 			return null;
 		}
 
