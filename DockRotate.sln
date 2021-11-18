@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DockRotate", "DockRotate\DockRotate.csproj", "{1872C48C-4CD3-4002-9022-9098AE939D3C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DockRotate", "Source\DockRotate\DockRotate.csproj", "{1872C48C-4CD3-4002-9022-9098AE939D3C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
