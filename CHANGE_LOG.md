@@ -1,5 +1,10 @@
 # Dock Rotate /L Unleashed :: Change Log
 
+* 2018-1102: 1.5.1.17 (peteletroll) for KSP 1.4.3.
+	+ Now rotation can be continuous (set rotation step to 0) and fast (new UI for wider speed range up to 3600°/s).
+	+ New UI for fine control of rotation step from 1°/s to 360°/s.
+	+ You can definitely make action controlled variable-pitch propellers.
+	+ Compiled for 1.5.1, but should work with 1.4.* too.
 * 2018-1018: 1.4.4.16 (peteletroll) for KSP 1.4.3.
 	+ If the rotation step is set to 0, the rotation will be continuous. You can stop it with the "Stop Rotation" right-click menu entry, the "Stop Rotation" action, or Alt-B.
 	+ This release is compiled on 1.4.5, but works on 1.5.0 too.
