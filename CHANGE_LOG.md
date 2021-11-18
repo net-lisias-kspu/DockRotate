@@ -1,5 +1,7 @@
 # Dock Rotate /L Unleashed :: Change Log
 
+* 2019-0324: 1.6.1.30 (peteletroll) for KSP 1.4.3.
+	+ Disabling rotation stops continuous rotation
 * 2019-0323: 1.6.1.29 (peteletroll) for KSP 1.4.3.
 	+ No changelog provided
 * 2019-0319: 1.6.1.28 (peteletroll) for KSP 1.4.3.
