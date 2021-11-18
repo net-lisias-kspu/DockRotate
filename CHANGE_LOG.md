@@ -1,5 +1,7 @@
 # Dock Rotate /L Unleashed :: Change Log
 
+* 2019-0419: 1.7.0.34 (peteletroll) for KSP 1.4.3.
+	+ anglePosition, angleVelocity and angleIsMoving available to kOS scripts.
 * 2019-0414: 1.7.0.33 (peteletroll) for KSP 1.4.3.
 	+ No changelog provided
 * 2019-0329: 1.6.1.32 (peteletroll) for KSP 1.4.3.
