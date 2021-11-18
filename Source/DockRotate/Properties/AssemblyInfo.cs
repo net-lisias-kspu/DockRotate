@@ -11,13 +11,9 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyCopyright(DockRotate.LegalMamboJambo.Copyright)]
 [assembly: AssemblyTrademark(DockRotate.LegalMamboJambo.Trademark)]
 [assembly: AssemblyCulture("")]
-// The assembly version has the format "{Major}.{Minor}.{Build}.{Revision}".
-// The form "{Major}.{Minor}.*" will automatically update the build and revision,
-// and "{Major}.{Minor}.{Build}.*" will update just the revision.
-[assembly: AssemblyVersion("1.12.1.55")]
-[assembly: AssemblyFileVersion("1.12.1.55")]
-// The following attributes are used to specify the signing key for the assembly,
-// if desired. See the Mono documentation for more information about signing.
-//[assembly: AssemblyDelaySign(false)]
-//[assembly: AssemblyKeyFile("")]
 
+[assembly: AssemblyVersion(DockRotate.Version.Number)]
+[assembly: AssemblyFileVersion(DockRotate.Version.Number)]
+[assembly: KSPAssembly("DockRotate", DockRotate.Version.major, DockRotate.Version.minor)]
+[assembly: KSPAssemblyDependency("KSPe", 2, 4)]
+[assembly: KSPAssemblyDependency("KSPe.UI", 2, 4)]
