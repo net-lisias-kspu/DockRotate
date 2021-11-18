@@ -1,5 +1,9 @@
 # Dock Rotate /L Unleashed :: Change Log
 
+* 2018-0706: 1.4.4.15 (peteletroll) for KSP 1.4.3.
+	+ If you press the modifier keys (Alt on Windows, Right Shift on Linux), all rotation actions are reversed: for example, if "1" rotates a port clockwise, "Mod-1" will rotate it counterclockwise.
+	+ All docking/undocking/decoupling events while moving are handled properly now.
+	+ These improvements make building robotic grappling arms practical.
 * 2018-0622: 1.4.3.14 (peteletroll) for KSP 1.4.3.
 	+ Recompiled for 1.4.3. Should work with any 1.4.* anyway.
 		- Lots of refactoring. I apparently like moving code around a lot.
