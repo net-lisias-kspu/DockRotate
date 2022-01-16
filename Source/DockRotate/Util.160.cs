@@ -35,12 +35,11 @@ namespace DockRotate
 
 		internal static ScreenMessage PostScreenMessage(string message, DockingStateChecker checker)
 		{
-			string color = ColorUtility.ToHtmlStringRGBA(checker.colorBad);
-			message = string.Format("<color=#{0}>{1}</color>", color, message);
 			return ScreenMessages.PostScreenMessage(
 				message
 				, checker.messageTimeout
 				, checker.messageStyle
+				, checker.colorBad
 			);
 		}
 	}

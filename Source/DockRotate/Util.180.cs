@@ -35,5 +35,15 @@ namespace DockRotate
 		{
 			host.DebugFSMState = target.DebugFSMState = true;
 		}
+
+		internal static ScreenMessage PostScreenMessage(string message, DockingStateChecker checker)
+		{
+			return ScreenMessages.PostScreenMessage(
+				message
+				, checker.messageTimeout
+				, checker.messageStyle
+				, checker.colorBad
+			);
+		}
 	}
 }

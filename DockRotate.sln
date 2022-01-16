@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DockRotate", "Source\DockRotate\DockRotate.csproj", "{1872C48C-4CD3-4002-9022-9098AE939D3C}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DockRotate-1122", "Source\DockRotate\DockRotate-1122.csproj", "{1872C48C-4CD3-4002-9022-9098AE939D3D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DockRotate-180", "Source\DockRotate\DockRotate-180.csproj", "{1872C48C-4CD3-4002-9022-9098AE939D3E}"
@@ -11,16 +9,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DockRotate-171", "Source\Do
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DockRotate-131", "Source\DockRotate\DockRotate-131.csproj", "{1872C48C-4CD3-4002-9022-9098AE939D40}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DockRotate-140", "Source\DockRotate\DockRotate-140.csproj", "{1872C48C-4CD3-4002-9022-9098AE939D41}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DockRotate-160", "Source\DockRotate\DockRotate-160.csproj", "{1872C48C-4CD3-4002-9022-9098AE939D42}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{1872C48C-4CD3-4002-9022-9098AE939D3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1872C48C-4CD3-4002-9022-9098AE939D3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1872C48C-4CD3-4002-9022-9098AE939D3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1872C48C-4CD3-4002-9022-9098AE939D3C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1872C48C-4CD3-4002-9022-9098AE939D3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1872C48C-4CD3-4002-9022-9098AE939D3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1872C48C-4CD3-4002-9022-9098AE939D3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -37,6 +35,14 @@ Global
 		{1872C48C-4CD3-4002-9022-9098AE939D40}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1872C48C-4CD3-4002-9022-9098AE939D40}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1872C48C-4CD3-4002-9022-9098AE939D40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1872C48C-4CD3-4002-9022-9098AE939D41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1872C48C-4CD3-4002-9022-9098AE939D41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1872C48C-4CD3-4002-9022-9098AE939D41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1872C48C-4CD3-4002-9022-9098AE939D41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1872C48C-4CD3-4002-9022-9098AE939D42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1872C48C-4CD3-4002-9022-9098AE939D42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1872C48C-4CD3-4002-9022-9098AE939D42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1872C48C-4CD3-4002-9022-9098AE939D42}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0

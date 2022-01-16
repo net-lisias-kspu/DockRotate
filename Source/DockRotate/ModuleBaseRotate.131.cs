@@ -131,7 +131,11 @@ namespace DockRotate
 			isPersistant = true,
 			guiFormat = "F3"
 		)]
-		[UI_FloatRange]
+		[UI_FloatRange(
+			minValue = -1,
+			maxValue = 1,
+			stepIncrement = 0.1f
+		)]
 		public float axisField = 0f;
 #endif
 
@@ -244,5 +248,65 @@ namespace DockRotate
 		}
 #endif
 
+		private void setupGroup() { }
+
+		private void setEvents(bool cmd)
+		{
+			if (cmd == eventState) {
+				Log.detail(desc(), ".setEvents({0}) repeated", cmd);
+				return;
+			}
+
+			Log.detail(desc(), ".setEvents({0})", cmd);
+
+			if (cmd) {
+				GameEvents.onActiveJointNeedUpdate.Add(RightBeforeStructureChange_JointUpdate);
+
+				GameEvents.onEditorShipModified.Add(RightAfterEditorChange_ShipModified);
+				GameEvents.onEditorPartEvent.Add(RightAfterEditorChange_Event);
+
+				GameEvents.onVesselGoOnRails.Add(OnVesselGoOnRails);
+				GameEvents.onVesselGoOffRails.Add(OnVesselGoOffRails);
+
+				GameEvents.onPartCouple.Add(RightBeforeStructureChange_Action);
+				GameEvents.onPartCoupleComplete.Add(RightAfterStructureChange_Action);
+				GameEvents.onPartDeCouple.Add(RightBeforeStructureChange_Part);
+				GameEvents.onPartDeCoupleComplete.Add(RightAfterStructureChange_Part);
+
+				GameEvents.onVesselDocking.Add(RightBeforeStructureChange_Ids);
+				GameEvents.onDockingComplete.Add(RightAfterStructureChange_Action);
+				GameEvents.onPartUndock.Add(RightBeforeStructureChange_Part);
+				GameEvents.onPartUndockComplete.Add(RightAfterStructureChange_Part);
+
+				GameEvents.onSameVesselDock.Add(RightAfterSameVesselDock);
+				GameEvents.onSameVesselUndock.Add(RightAfterSameVesselUndock);
+			} else {
+				GameEvents.onActiveJointNeedUpdate.Remove(RightBeforeStructureChange_JointUpdate);
+
+				GameEvents.onEditorShipModified.Remove(RightAfterEditorChange_ShipModified);
+				GameEvents.onEditorPartEvent.Remove(RightAfterEditorChange_Event);
+
+				GameEvents.onVesselGoOnRails.Remove(OnVesselGoOnRails);
+				GameEvents.onVesselGoOffRails.Remove(OnVesselGoOffRails);
+
+				GameEvents.onPartCouple.Remove(RightBeforeStructureChange_Action);
+				GameEvents.onPartCoupleComplete.Remove(RightAfterStructureChange_Action);
+				GameEvents.onPartDeCouple.Remove(RightBeforeStructureChange_Part);
+				GameEvents.onPartDeCoupleComplete.Remove(RightAfterStructureChange_Part);
+
+				GameEvents.onVesselDocking.Remove(RightBeforeStructureChange_Ids);
+				GameEvents.onDockingComplete.Remove(RightAfterStructureChange_Action);
+				GameEvents.onPartUndock.Remove(RightBeforeStructureChange_Part);
+				GameEvents.onPartUndockComplete.Remove(RightAfterStructureChange_Part);
+
+				GameEvents.onSameVesselDock.Remove(RightAfterSameVesselDock);
+				GameEvents.onSameVesselUndock.Remove(RightAfterSameVesselUndock);
+			}
+		}
+
+		private bool TheresPaw(Part part)
+		{
+			return true;	// FIXME: How to detect the PAW on KSP < 1.7.1?
+		}
 	}
 }

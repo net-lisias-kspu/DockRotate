@@ -22,6 +22,8 @@
 	If not, see <https://www.gnu.org/licenses/>.
 
 */
+using System.Diagnostics;
+
 namespace DockRotate
 {
 	public partial class ModuleDockRotate: ModuleBaseRotate
@@ -77,6 +79,16 @@ namespace DockRotate
 		}
 #endif
 
+		[ConditionalAttribute("DEBUG")]
+		private void LogDockingNode()
+		{
+			if (dockingNode) {
+				Log.detail(nameof(ModuleDockRotate), "Part: {0}-{1} FSM Start State {2} in ModuleDockRotate.doSetup({3})"
+						, part.name, part.persistentId, dockingNode.state, part.flightID
+					);
+				Util.setDebug(dockingNode);
+			}
+		}
 	}
 }
 

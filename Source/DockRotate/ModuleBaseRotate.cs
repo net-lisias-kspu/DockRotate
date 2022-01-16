@@ -785,11 +785,6 @@ namespace DockRotate
 			return action.from.part == part || action.to.part == part;
 		}
 
-		private bool care(uint id1, uint id2)
-		{
-			return vessel && (vessel.persistentId == id1 || vessel.persistentId == id2);
-		}
-
 		protected void scheduleDockingStatesCheck(bool verbose)
 		{
 			VesselMotionManager vmm = VesselMotionManager.get(vessel);
@@ -829,14 +824,6 @@ namespace DockRotate
 		{
 			bool c = care(action);
 			evlog(nameof(RightBeforeStructureChange_Action), action, c);
-			if (!c) return;
-			RightBeforeStructureChange();
-		}
-
-		public void RightBeforeStructureChange_Ids(uint id1, uint id2)
-		{
-			bool c = care(id1, id2);
-			evlog(nameof(RightBeforeStructureChange_Ids), id1, id2, c);
 			if (!c) return;
 			RightBeforeStructureChange();
 		}
@@ -940,7 +927,7 @@ namespace DockRotate
 		}
 
 		private bool eventState = false;
-
+#if false
 		private void setEvents(bool cmd)
 		{
 			if (cmd == eventState) {
@@ -996,6 +983,7 @@ namespace DockRotate
 
 			eventState = cmd;
 		}
+#endif
 
 		private static readonly string[,] guiList = {
 			// flags:
@@ -1081,12 +1069,14 @@ namespace DockRotate
 					"Stop Event Trace" : "Start Event Trace";
 #endif
 
-			if (part.PartActionWindow != null)
-				setupGroup();
+			setupGroup();
 		}
 
+#if false
 		private void setupGroup()
 		{
+			if (null != part.PartActionWindow) return;
+
 			bool expanded = hasJointMotion && (rotationEnabled || needsAlignment);
 			List<BasePAWGroup> l = allGroups(GROUPNAME);
 			for (int i = 0; i < l.Count; i++)
@@ -1108,6 +1098,7 @@ namespace DockRotate
 			}
 			return cached_allGroups;
 		}
+#endif
 
 		public override void OnAwake()
 		{
@@ -1162,7 +1153,7 @@ namespace DockRotate
 			needsAlignment = hasJointMotion && !angleIsMoving
 				&& Mathf.Abs(jointMotion.angleToSnap(rotationStep)) >= .5e-4f;
 
-			if (MapView.MapIsEnabled || !part.PartActionWindow)
+			if (MapView.MapIsEnabled || !this.TheresPaw(part))
 				return;
 
 			bool updfrm = ((Time.frameCount + part.flightID) & 3) == 0;
@@ -1307,8 +1298,9 @@ namespace DockRotate
 				Quaternion rot = axis.rotation(angle);
 
 				Transform t = host.transform;
-				t.SetPositionAndRotation(rot * (t.position - pos) + pos,
-					rot * t.rotation);
+				//t.SetPositionAndRotation(rot * (t.position - pos) + pos, rot * t.rotation);
+				t.position = rot * (t.position - pos) + pos;
+				t.rotation = rot * t.rotation;
 
 				GameEvents.onEditorPartEvent.Fire(ConstructionEventType.PartRotated, host);
 				GameEvents.onEditorPartEvent.Fire(ConstructionEventType.PartTweaked, host);

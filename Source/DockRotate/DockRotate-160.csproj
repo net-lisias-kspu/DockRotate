@@ -5,13 +5,13 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{1872C48C-4CD3-4002-9022-9098AE939D3F}</ProjectGuid>
+    <ProjectGuid>{1872C48C-4CD3-4002-9022-9098AE939D42}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>DockRotate</RootNamespace>
     <AssemblyName>DockRotate</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <BaseIntermediateOutputPath>..\..\obj\171</BaseIntermediateOutputPath>
-    <TargetName>DockRotate.171</TargetName>
+    <BaseIntermediateOutputPath>..\..\obj\160</BaseIntermediateOutputPath>
+    <TargetName>DockRotate.160</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -50,9 +50,9 @@
     <Compile Include="SmoothMotion.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="VesselMotionManager.cs" />
-    <Compile Include="ModuleDockRotate.171.cs" />
+    <Compile Include="ModuleDockRotate.140.cs" />
     <Compile Include="Util.160.cs" />
-    <Compile Include="ModuleBaseRotate.171.cs" />
+    <Compile Include="ModuleBaseRotate.140.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System">
@@ -67,11 +67,11 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\..\..\..\..\LIB\managed\1.7.1\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\LIB\managed\1.6.0\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>..\..\..\..\..\..\LIB\managed\1.7.1\UnityEngine.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\LIB\managed\1.6.0\UnityEngine.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>

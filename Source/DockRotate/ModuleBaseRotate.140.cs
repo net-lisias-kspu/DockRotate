@@ -22,17 +22,12 @@
 	If not, see <https://www.gnu.org/licenses/>.
 
 */
-using System.Collections.Generic;
-
 namespace DockRotate
 {
 	public partial class ModuleBaseRotate
 	{
 		[KSPField(
 			guiName = "#DCKROT_angle",
-			groupName = GROUPNAME,
-			groupDisplayName = GROUPLABEL,
-			groupStartCollapsed = true,
 			guiActive = true,
 			guiActiveEditor = true
 		)]
@@ -40,9 +35,6 @@ namespace DockRotate
 
 		[UI_Toggle]
 		[KSPField(
-			groupName = GROUPNAME,
-			groupDisplayName = GROUPLABEL,
-			groupStartCollapsed = true,
 			guiName = "#DCKROT_rotation",
 			guiActive = true,
 			guiActiveEditor = true,
@@ -56,9 +48,6 @@ namespace DockRotate
 			minValue = 0f, maxValue = 360f
 		)]
 		[KSPField(
-			groupName = GROUPNAME,
-			groupDisplayName = GROUPLABEL,
-			groupStartCollapsed = true,
 			guiActive = true,
 			guiActiveEditor = true,
 			isPersistant = true,
@@ -73,9 +62,6 @@ namespace DockRotate
 			minValue = 1, maxValue = 8f * 360f
 		)]
 		[KSPField(
-			groupName = GROUPNAME,
-			groupDisplayName = GROUPLABEL,
-			groupStartCollapsed = true,
 			guiActive = true,
 			guiActiveEditor = true,
 			isPersistant = true,
@@ -86,9 +72,6 @@ namespace DockRotate
 
 		[UI_Toggle(affectSymCounterparts = UI_Scene.None)]
 		[KSPField(
-			groupName = GROUPNAME,
-			groupDisplayName = GROUPLABEL,
-			groupStartCollapsed = true,
 			guiActive = true,
 			guiActiveEditor = true,
 			isPersistant = true,
@@ -99,9 +82,6 @@ namespace DockRotate
 
 		[UI_Toggle]
 		[KSPField(
-			groupName = GROUPNAME,
-			groupDisplayName = GROUPLABEL,
-			groupStartCollapsed = true,
 			guiActive = true,
 			guiActiveEditor = true,
 			isPersistant = true,
@@ -112,8 +92,6 @@ namespace DockRotate
 
 		[UI_Toggle]
 		[KSPField(
-			groupName = DEBUGGROUP,
-			groupDisplayName = DEBUGGROUP,
 			guiActive = DEBUGMODE,
 			guiActiveEditor = DEBUGMODE,
 			isPersistant = true,
@@ -123,26 +101,16 @@ namespace DockRotate
 		public bool smartAutoStruts = true;
 
 		[KSPField(
-			guiActive = DEBUGMODE,
-			groupName = DEBUGGROUP,
-			groupDisplayName = DEBUGGROUP,
-			groupStartCollapsed = true
+			guiActive = DEBUGMODE
 		)]
 		public float anglePosition;
-
 		[KSPField(
-			guiActive = DEBUGMODE,
-			groupName = DEBUGGROUP,
-			groupDisplayName = DEBUGGROUP,
-			groupStartCollapsed = true
+			guiActive = DEBUGMODE
 		)]
 		public float angleVelocity;
 
 		[KSPField(
-			guiActive = DEBUGMODE,
-			groupName = DEBUGGROUP,
-			groupDisplayName = DEBUGGROUP,
-			groupStartCollapsed = true
+			guiActive = DEBUGMODE
 		)]
 		public bool angleIsMoving;
 
@@ -150,37 +118,29 @@ namespace DockRotate
 		[KSPField(
 			guiName = "#DCKROT_status",
 			guiActive = true,
-			guiActiveEditor = false,
-			groupName = DEBUGGROUP,
-			groupDisplayName = DEBUGGROUP,
-			groupStartCollapsed = true
+			guiActiveEditor = false
 		)]
 		public string nodeStatus = "";
 #endif
 
 #if DEBUG
-		[KSPAxisField(
+		[KSPField(
 			guiName = "AxisField",
 			guiActive = true,
 			guiActiveEditor = true,
 			isPersistant = true,
-			guiFormat = "F3",
-			axisMode = KSPAxisMode.Absolute,
-			minValue = -1f,
-			maxValue = 1f,
-			incrementalSpeed = 0.1f,
-			groupName = DEBUGGROUP,
-			groupDisplayName = DEBUGGROUP,
-			groupStartCollapsed = true
+			guiFormat = "F3"
+		)]
+		[UI_FloatRange(
+			minValue = -1,
+			maxValue = 1,
+			stepIncrement = 0.1f
 		)]
 		public float axisField = 0f;
 #endif
 
 		[KSPEvent(
 			guiName = "#DCKROT_rotate_clockwise",
-			groupName = GROUPNAME,
-			groupDisplayName = GROUPLABEL,
-			groupStartCollapsed = true,
 			guiActive = false,
 			guiActiveEditor = false,
 			requireFullControl = true
@@ -192,9 +152,6 @@ namespace DockRotate
 
 		[KSPEvent(
 			guiName = "#DCKROT_rotate_counterclockwise",
-			groupName = GROUPNAME,
-			groupDisplayName = GROUPLABEL,
-			groupStartCollapsed = true,
 			guiActive = false,
 			guiActiveEditor = false,
 			requireFullControl = true
@@ -206,9 +163,6 @@ namespace DockRotate
 
 		[KSPEvent(
 			guiName = "#DCKROT_rotate_to_snap",
-			groupName = GROUPNAME,
-			groupDisplayName = GROUPLABEL,
-			groupStartCollapsed = true,
 			guiActive = false,
 			guiActiveEditor = false,
 			requireFullControl = true
@@ -220,9 +174,6 @@ namespace DockRotate
 
 		[KSPEvent(
 			guiName = "#DCKROT_stop_rotation",
-			groupName = GROUPNAME,
-			groupDisplayName = GROUPLABEL,
-			groupStartCollapsed = true,
 			guiActive = false,
 			guiActiveEditor = false,
 			requireFullControl = true
@@ -239,10 +190,7 @@ namespace DockRotate
 			guiName = "autoSnap",
 			isPersistant = true,
 			guiActive = DEBUGMODE,
-			guiActiveEditor = DEBUGMODE,
-			groupName = DEBUGGROUP,
-			groupDisplayName = DEBUGGROUP,
-			groupStartCollapsed = true
+			guiActiveEditor = DEBUGMODE
 		)]
 		public bool autoSnap = false;
 
@@ -253,21 +201,16 @@ namespace DockRotate
 			guiName = "hideCommands",
 			isPersistant = true,
 			guiActive = DEBUGMODE,
-			guiActiveEditor = DEBUGMODE,
-			groupName = DEBUGGROUP,
-			groupDisplayName = DEBUGGROUP,
-			groupStartCollapsed = true
+			guiActiveEditor = DEBUGMODE
 		)]
 		public bool hideCommands = false;
+
 
 #if DEBUG
 		[KSPEvent(
 			guiName = "Toggle Autostrut Display",
 			guiActive = true,
-			guiActiveEditor = true,
-			groupName = DEBUGGROUP,
-			groupDisplayName = DEBUGGROUP,
-			groupStartCollapsed = true
+			guiActiveEditor = true
 		)]
 		public void ToggleAutoStrutDisplay()
 		{
@@ -275,10 +218,7 @@ namespace DockRotate
 		}
 
 		[KSPEvent(
-			guiActive = true,
-			groupName = DEBUGGROUP,
-			groupDisplayName = DEBUGGROUP,
-			groupStartCollapsed = true
+			guiActive = true
 		)]
 		public void DumpToLog()
 		{
@@ -288,10 +228,7 @@ namespace DockRotate
 		[KSPEvent(
 			guiName = "Cycle Autostruts",
 			guiActive = true,
-			guiActiveEditor = true,
-			groupName = DEBUGGROUP,
-			groupDisplayName = DEBUGGROUP,
-			groupStartCollapsed = true
+			guiActiveEditor = true
 		)]
 		public void CycleAutoStruts()
 		{
@@ -303,43 +240,15 @@ namespace DockRotate
 		[KSPEvent(
 			guiName = "Toggle Trace Events",
 			guiActive = true,
-			guiActiveEditor = true,
-			groupName = DEBUGGROUP,
-			groupDisplayName = DEBUGGROUP,
-			groupStartCollapsed = true
+			guiActiveEditor = true
 		)]
 		public void ToggleTraceEvents()
 		{
 			GameEvents.debugEvents = !GameEvents.debugEvents;
 		}
-
 #endif
 
-		private void setupGroup()
-		{
-			if (null != part.PartActionWindow) return;
-
-			bool expanded = hasJointMotion && (rotationEnabled || needsAlignment);
-			List<BasePAWGroup> l = allGroups(GROUPNAME);
-			for (int i = 0; i < l.Count; i++)
-				l[i].startCollapsed = !expanded;
-		}
-
-		private List<BasePAWGroup> cached_allGroups = null;
-
-		private List<BasePAWGroup> allGroups(string name)
-		{
-			if (cached_allGroups == null) {
-				cached_allGroups = new List<BasePAWGroup>();
-				for (int i = 0; i < Fields.Count; i++)
-					if (Fields[i] != null && Fields[i].group != null && Fields[i].group.name == name)
-						cached_allGroups.Add(Fields[i].group);
-				for (int i = 0; i < Events.Count; i++)
-					if (Events[i] != null && Events[i].group != null && Events[i].group.name == name)
-						cached_allGroups.Add(Events[i].group);
-			}
-			return cached_allGroups;
-		}
+		private void setupGroup() { }
 
 		private void setEvents(bool cmd)
 		{
@@ -397,7 +306,7 @@ namespace DockRotate
 
 		private bool TheresPaw(Part part)
 		{
-			return part.PartActionWindow;
+			return true;	// FIXME: How to detect the PAW on KSP < 1.7.1?
 		}
 
 		public void RightBeforeStructureChange_Ids(uint id1, uint id2)
@@ -412,6 +321,5 @@ namespace DockRotate
 		{
 			return vessel && (vessel.persistentId == id1 || vessel.persistentId == id2);
 		}
-
 	}
 }

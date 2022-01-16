@@ -51,12 +51,11 @@ namespace DockRotate
 		{
 			if (dockingNode) {
 				Log.detail(nameof(ModuleDockRotate), "Part: {0}-{1} FSM Start State {2} in ModuleDockRotate.doSetup({3})"
-						, part.name, part.GetInstanceID(), dockingNode.state, part.flightID
+						, part.name, part.persistentId, dockingNode.state, part.flightID
 					);
 				Util.setDebug(dockingNode);
 			}
 		}
-
 	}
 }
 

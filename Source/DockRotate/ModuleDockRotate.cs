@@ -231,14 +231,7 @@ namespace DockRotate
 				DebugScreenConsole.AddConsoleCommand("dr", consoleCommand, "DockRotate commands");
 			}
 
-#if DEBUG
-			if (dockingNode) {
-				Log.detail(nameof(ModuleDockRotate), "Part: {0}-{1} FSM Start State {2} in ModuleDockRotate.doSetup({3})"
-						, part.name, part.persistentId, dockingNode.state, part.flightID
-					);
-				Util.setDebug(dockingNode);
-			}
-#endif
+			this.LogDockingNode();
 
 			if (onLaunch) {
 				isDocked = hasJointMotion;

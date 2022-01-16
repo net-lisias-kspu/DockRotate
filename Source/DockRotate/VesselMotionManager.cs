@@ -174,8 +174,7 @@ namespace DockRotate
 				Log.trace(desc(), "{0} analyzing incoherent states in {1}", (verbose ? "verbosely " : ""), vessel.GetName());
 				DockingStateChecker.Result result = checker.checkVessel(vessel, verbose);
 				if (result.foundError)
-					ScreenMessages.PostScreenMessage(Localizer.Format("#DCKROT_bad_states"),
-						checker.messageTimeout, checker.messageStyle, checker.colorBad);
+					Util.PostScreenMessage(Localizer.Format("#DCKROT_bad_states"), checker);
 			}
 		}
 
