@@ -28,7 +28,7 @@ using KSP.Localization;
 
 namespace DockRotate
 {
-	public class VesselMotionManager: MonoBehaviour
+	public class VesselMotionManager: MonoBehaviour, Log.IClient
 	{
 		private Vessel vessel;
 
@@ -41,9 +41,9 @@ namespace DockRotate
 			if (!v)
 				return null;
 			if (!v.loaded)
-				Log.warn(nameof(VesselMotionManager), ".get({0}) called on unloaded vessel", v.desc());
+				Log.warn(typeof(VesselMotionManager), ".get({0}) called on unloaded vessel", (v as Log.IClient).who(false));
 			if (!v.rootPart)
-				Log.warn(nameof(VesselMotionManager), ".get({0}) called on rootless vessel", v.desc());
+				Log.warn(typeof(VesselMotionManager), ".get({0}) called on rootless vessel", (v as Log.IClient).who(false));
 
 			VesselMotionManager mgr = null;
 			VesselMotionManager[] mgrs = v.GetComponents<VesselMotionManager>();
@@ -52,7 +52,7 @@ namespace DockRotate
 					if (mgrs[i].vessel == v && mgrs[i].rootPart == v.rootPart && !mgr) {
 						mgr = mgrs[i];
 					} else {
-						Log.warn(nameof(VesselMotionManager), ".get({0}) found incoherency with {1}", v.desc() , mgrs[i].desc());
+						Log.warn(typeof(VesselMotionManager), ".get({0}) found incoherency with {1}", v.desc() , (mgrs[i] as Log.IClient).who(false));
 						Destroy(mgrs[i]);
 					}
 				}
@@ -62,7 +62,7 @@ namespace DockRotate
 				mgr = v.gameObject.AddComponent<VesselMotionManager>();
 				mgr.vessel = v;
 				mgr.rootPart = v.rootPart;
-				Log.detail(nameof(VesselMotionManager), ".get({0}) created {1}", v.desc(), mgr.desc());
+				Log.detail(typeof(VesselMotionManager), ".get({0}) created {1}", v.desc(), (mgr as Log.IClient).who(false));
 			}
 
 			return mgr;
@@ -71,7 +71,7 @@ namespace DockRotate
 		public void resetRotCount()
 		{
 			if (rotCount != 0)
-				Log.trace(desc(), ".resetRotCount(): {0} -> RESET", rotCount);
+				Log.trace(this, ".resetRotCount(): {0} -> RESET", rotCount);
 			rotCount = 0;
 		}
 
@@ -82,19 +82,19 @@ namespace DockRotate
 				ret = 0;
 
 			if (rotCount == 0 && delta > 0)
-				Log.trace(desc(), "START");
+				Log.trace(this, "START");
 
 			if (delta != 0)
-				Log.warn(desc(), ".changeCount({0}): {1} -> {2}", delta, rotCount, ret);
+				Log.warn(this, ".changeCount({0}): {1} -> {2}", delta, rotCount, ret);
 
 			if (ret == 0 && rotCount > 0) {
-				Log.detail(desc(), ": securing autostruts");
+				Log.detail(this, ": securing autostruts");
 				vessel.CycleAllAutoStrut();
 				vessel.KJRNextCycleAllAutoStrut();
 			}
 
 			if (ret == 0 && delta < 0)
-				Log.trace(desc(), "STOP");
+				Log.trace(this, "STOP");
 
 			return rotCount = ret;
 		}
@@ -104,7 +104,7 @@ namespace DockRotate
 			if (!vessel) {
 				vessel = gameObject.GetComponent<Vessel>();
 				if (vessel)
-					Log.detail(desc(), ".Awake(): found vessel");
+					Log.detail(this, ".Awake(): found vessel");
 			}
 		}
 
@@ -113,7 +113,7 @@ namespace DockRotate
 			if (!vessel) {
 				vessel = gameObject.GetComponent<Vessel>();
 				if (vessel)
-					Log.detail(desc(), ".Start(): found vessel");
+					Log.detail(this, ".Start(): found vessel");
 			}
 			setEvents(true);
 			enabled = false;
@@ -122,7 +122,7 @@ namespace DockRotate
 		public void OnDestroy()
 		{
 			setEvents(false);
-			Log.trace(desc(), ".OnDestroy()");
+			Log.trace(this, ".OnDestroy()");
 		}
 
 		private bool eventState = false;
@@ -145,7 +145,7 @@ namespace DockRotate
 		{
 			if (v != vessel)
 				return;
-			Log.trace(desc(), ".onActiveJointNeedUpdate({0})", v.desc());
+			Log.trace(this, ".onActiveJointNeedUpdate({0})", (v as Log.IClient).who(false));
 		}
 
 		public void scheduleDockingStatesCheck(bool verbose)
@@ -169,16 +169,16 @@ namespace DockRotate
 				yield return new WaitForFixedUpdate();
 
 			if (thisCounter < dockingCheckCounter) {
-				Log.trace(desc(), "skipping analysis, another pending");
+				Log.trace(this, "skipping analysis, another pending");
 			} else {
-				Log.trace(desc(), "{0} analyzing incoherent states in {1}", (verbose ? "verbosely " : ""), vessel.GetName());
+				Log.trace(this, "{0} analyzing incoherent states in {1}", (verbose ? "verbosely " : ""), vessel.GetName());
 				DockingStateChecker.Result result = checker.checkVessel(vessel, verbose);
 				if (result.foundError)
 					Util.PostScreenMessage(Localizer.Format("#DCKROT_bad_states"), checker);
 			}
 		}
 
-		private string desc()
+		string Log.IClient.who(bool verbose)
 		{
 			return "VMM:" + GetInstanceID() + ":" + vessel.desc(true);
 		}

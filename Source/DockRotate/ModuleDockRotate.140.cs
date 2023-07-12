@@ -32,7 +32,7 @@ namespace DockRotate
 #if DEBUG
 		public override void dumpExtra()
 		{
-			string d = desc();
+			string d = (this as Log.IClient).who(false);
 			if (dockingNode) {
 				Log.dbg("{0}: attachJoint: {1}", d, part.attachJoint.desc());
 				Log.dbg("{0}: dockedPartUId: {1}", d, dockingNode.dockedPartUId);
@@ -50,7 +50,7 @@ namespace DockRotate
 		private void LogDockingNode()
 		{
 			if (dockingNode) {
-				Log.detail(nameof(ModuleDockRotate), "Part: {0}-{1} FSM Start State {2} in ModuleDockRotate.doSetup({3})"
+				Log.detail(this, "Part: {0}-{1} FSM Start State {2} in ModuleDockRotate.doSetup({3})"
 						, part.name, part.persistentId, dockingNode.state, part.flightID
 					);
 				Util.setDebug(dockingNode);

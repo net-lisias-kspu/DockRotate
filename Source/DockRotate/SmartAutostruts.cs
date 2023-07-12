@@ -136,7 +136,7 @@ namespace DockRotate
 						continue;
 					if (rotParts.contains(j.Host) != rotParts.contains(j.Target)
 						|| j.Host == part || j.Target == part) {
-							Log.detail(part.desc(), ": releasing [{0}] {1}", ++count, j.desc());
+							Log.detail(part, ": releasing [{0}] {1}", ++count, j.desc());
 						j.DestroyJoint();
 						autoStruts.RemoveAt(ii);
 					}
@@ -157,7 +157,7 @@ namespace DockRotate
 					continue;
 				if (rotParts.contains(j.Host) != rotParts.contains(j.Target)
 					|| j.Host == part || j.Target == part) {
-					Log.detail(part.desc(), ": releasing [{0}] {1}", ++count, j.desc());
+					Log.detail(part, ": releasing [{0}] {1}", ++count, j.desc());
 					j.Host.ReleaseAutoStruts();
 				}
 			}

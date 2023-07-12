@@ -253,11 +253,11 @@ namespace DockRotate
 		private void setEvents(bool cmd)
 		{
 			if (cmd == eventState) {
-				Log.detail(desc(), ".setEvents({0}) repeated", cmd);
+				Log.detail(this, ".setEvents({0}) repeated", cmd);
 				return;
 			}
 
-			Log.detail(desc(), ".setEvents({0})", cmd);
+			Log.detail(this, ".setEvents({0})", cmd);
 
 			if (cmd) {
 				GameEvents.onActiveJointNeedUpdate.Add(RightBeforeStructureChange_JointUpdate);

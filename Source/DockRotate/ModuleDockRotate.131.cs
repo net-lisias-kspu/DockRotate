@@ -32,16 +32,15 @@ namespace DockRotate
 #if DEBUG
 		public override void dumpExtra()
 		{
-			string d = desc();
 			if (dockingNode) {
-				Log.dbg("{0}: attachJoint: {1}", d, part.attachJoint.desc());
-				Log.dbg("{0}: dockedPartUId: {1}", d, dockingNode.dockedPartUId);
-				Log.dbg("{0}: dockingNode state: \"{1}\"", d, dockingNode.state);
-				Log.dbg("{0}: sameVesselDockingJoint: {1}", d, dockingNode.sameVesselDockJoint.desc());
-				Log.dbg("{0}: vesselInfo = {1}", d, dockingNode.vesselInfo.desc());
-				Log.dbg("{0}: canRotateDefault() = {1}", d, canRotateDefault());
+				Log.dbg(this, ": attachJoint: {0}", part.attachJoint.desc());
+				Log.dbg(this, ": dockedPartUId: {0}", dockingNode.dockedPartUId);
+				Log.dbg(this, ": dockingNode state: \"{0}\"", dockingNode.state);
+				Log.dbg(this, ": sameVesselDockingJoint: {0}", dockingNode.sameVesselDockJoint.desc());
+				Log.dbg(this, ": vesselInfo = {0}", dockingNode.vesselInfo.desc());
+				Log.dbg(this, ": canRotateDefault() = {0}", canRotateDefault());
 			} else {
-				Log.dbg("{0}: no dockingNode", d);
+				Log.dbg(this, ": no dockingNode");
 			}
 		}
 #endif
@@ -50,7 +49,7 @@ namespace DockRotate
 		private void LogDockingNode()
 		{
 			if (dockingNode) {
-				Log.detail(nameof(ModuleDockRotate), "Part: {0}-{1} FSM Start State {2} in ModuleDockRotate.doSetup({3})"
+				Log.detail(typeof(ModuleDockRotate), "Part: {0}-{1} FSM Start State {2} in ModuleDockRotate.doSetup({3})"
 						, part.name, part.GetInstanceID(), dockingNode.state, part.flightID
 					);
 				Util.setDebug(dockingNode);

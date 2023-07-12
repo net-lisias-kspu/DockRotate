@@ -33,7 +33,7 @@ using CompoundParts;
 namespace DockRotate
 {
 	public abstract partial class ModuleBaseRotate: PartModule,
-		IJointLockState, IResourceConsumer
+		IJointLockState, IResourceConsumer, Log.IClient
 	{
 		protected const string GROUPNAME = "DockRotate";
 		protected const string GROUPLABEL = "#DCKROT_rotation";
@@ -65,7 +65,7 @@ namespace DockRotate
 		{
 			int r = getRevision();
 			if (Revision != r) {
-				Log.warn(desc(), ": REVISION {0} -> {1}", Revision, r);
+				Log.warn(this, ": REVISION {0} -> {1}", Revision, r);
 				Revision = r;
 			}
 		}
@@ -243,7 +243,7 @@ namespace DockRotate
 		)]
 		public void EnableRotation(KSPActionParam param)
 		{
-			Log.trace(desc(), ": action {0}", param.desc());
+			Log.trace(this, ": action {0}", param.desc());
 			rotationEnabled = true;
 		}
 
@@ -253,7 +253,7 @@ namespace DockRotate
 		)]
 		public void DisableRotation(KSPActionParam param)
 		{
-			Log.trace(desc(), ": action {0}", param.desc());
+			Log.trace(this, ": action {0}", param.desc());
 			rotationEnabled = false;
 		}
 
@@ -263,7 +263,7 @@ namespace DockRotate
 		)]
 		public void ToggleRotation(KSPActionParam param)
 		{
-			Log.trace(desc(), ": action {0}", param.desc());
+			Log.trace(this, ": action {0}", param.desc());
 			rotationEnabled = !rotationEnabled;
 		}
 
@@ -273,7 +273,7 @@ namespace DockRotate
 		)]
 		public void RotateClockwise(KSPActionParam param)
 		{
-			Log.trace(desc(), ": action {0}", param.desc());
+			Log.trace(this, ": action {0}", param.desc());
 			if (reverseActionRotationKey()) {
 				doRotateCounterclockwise();
 			} else {
@@ -303,7 +303,7 @@ namespace DockRotate
 		)]
 		public void RotateCounterclockwise(KSPActionParam param)
 		{
-			Log.trace(desc(), ": action {0}", param.desc());
+			Log.trace(this, ": action {0}", param.desc());
 			if (reverseActionRotationKey()) {
 				doRotateClockwise();
 			} else {
@@ -333,7 +333,7 @@ namespace DockRotate
 		)]
 		public void RotateToSnap(KSPActionParam param)
 		{
-			Log.trace(desc(), ": action {0}", param.desc());
+			Log.trace(this, ": action {0}", param.desc());
 			doRotateToSnap();
 		}
 
@@ -359,7 +359,7 @@ namespace DockRotate
 		)]
 		public void StopRotation(KSPActionParam param)
 		{
-			Log.trace(desc(), ": action {0}", param.desc());
+			Log.trace(this, ": action {0}", param.desc());
 			doStopRotation();
 		}
 
@@ -447,7 +447,7 @@ namespace DockRotate
 #endif
 		private void doDumpToLog()
 		{ 
-			string d = desc(true);
+			string d = (this as Log.IClient).who(true);
 			Log.trace(d, ": BEGIN DUMP");
 
 			List<AttachNode> nodes = part.allAttachNodes();
@@ -550,7 +550,7 @@ namespace DockRotate
 		public bool IsJointUnlocked()
 		{
 			bool ret = currentRotation();
-			Log.trace(desc(), ".IsJointUnlocked() is {0}", ret);
+			Log.trace(this, ".IsJointUnlocked() is {0}", ret);
 			return ret;
 		}
 
@@ -558,7 +558,7 @@ namespace DockRotate
 
 		public List<PartResourceDefinition> GetConsumedResources()
 		{
-			// log(desc(), ".GetConsumedResource() called");
+			// log(this, ".GetConsumedResource() called");
 			if (cached_GetConsumedResources == null) {
 				cached_GetConsumedResources = new List<PartResourceDefinition>();
 				PartResourceDefinition ec = PartResourceLibrary.Instance.GetDefinition("ElectricCharge");
@@ -667,7 +667,7 @@ namespace DockRotate
 		{
 			BaseField fld = Fields[name];
 			if (fld == null) {
-				Log.detail(desc(), ".onFieldChange(\"{0}\") can't find field", name);
+				Log.detail(this, ".onFieldChange(\"{0}\") can't find field", name);
 				return;
 			}
 
@@ -681,13 +681,13 @@ namespace DockRotate
 		{
 			string name = fld != null ? fld.name : "<null>";
 			object newValue = fld.GetValue(this);
-			Log.trace(desc(), ": CHANGED {0}: {1} -> {2}", name, oldValue, newValue);
+			Log.trace(this, ": CHANGED {0}: {1} -> {2}", name, oldValue, newValue);
 		}
 
 		protected virtual void doSetup(bool onLaunch)
 		{
 			if (hasJointMotion && jointMotion.rotCur) {
-				Log.detail(desc(), ": skipping, is rotating");
+				Log.detail(this, ": skipping, is rotating");
 				return;
 			}
 
@@ -702,18 +702,18 @@ namespace DockRotate
 			stagingEnabled = false;
 
 			if (!part || !vessel || !setupLocalAxisDone) {
-				Log.warn(GetType().ToString(), ": doSetup() called at a bad time");
+				Log.warn(this, ": doSetup() called at a bad time");
 				return;
 			}
 
 			if (!part.hasPhysics()) {
-				Log.trace(desc(), ".doSetup(): physicsless part, disabled");
+				Log.trace(this, ".doSetup(): physicsless part, disabled");
 				return;
 			}
 
 			try {
 				if (onLaunch)
-					Log.trace(part.desc(), ".doSetup(): at launch");
+					Log.trace(part, ".doSetup(): at launch");
 
 				fillParentBaseRotate();
 				fillCrossStruts();
@@ -721,7 +721,7 @@ namespace DockRotate
 				PartJoint rotatingJoint = findMovingJoint();
 
 				if (rotatingJoint && !rotatingJoint.safetyCheck()) {
-					Log.detail(part.desc(), ": joint safety check failed for {0}", rotatingJoint.desc());
+					Log.detail(part, ": joint safety check failed for {0}", rotatingJoint.desc());
 					rotatingJoint = null;
 				}
 
@@ -749,7 +749,7 @@ namespace DockRotate
 					nodeRole += "OT";
 			}
 
-			Log.trace(desc(), ".doSetup(): joint {0}", (hasJointMotion ? jointMotion.joint.desc() : "null"));
+			Log.trace(this, ".doSetup(): joint {0}", (hasJointMotion ? jointMotion.joint.desc() : "null"));
 
 			setupGroup();
 
@@ -795,7 +795,7 @@ namespace DockRotate
 		public void OnVesselGoOnRails(Vessel v)
 		{
 			bool c = care(v);
-			evlog(nameof(OnVesselGoOnRails), v, c);
+			Log.evlog(this, nameof(OnVesselGoOnRails), v, c);
 			if (!c) return;
 			freezeCurrentRotation("go on rails", false);
 			setupDoneAt = 0;
@@ -807,7 +807,7 @@ namespace DockRotate
 		public void OnVesselGoOffRails(Vessel v)
 		{
 			bool c = care(v);
-			evlog(nameof(OnVesselGoOffRails), v, c);
+			Log.evlog(this, nameof(OnVesselGoOffRails), v, c);
 			if (!c) return;
 
 			// start speed always 0 when going off rails
@@ -823,7 +823,7 @@ namespace DockRotate
 		public void RightBeforeStructureChange_Action(GameEvents.FromToAction<Part, Part> action)
 		{
 			bool c = care(action);
-			evlog(nameof(RightBeforeStructureChange_Action), action, c);
+			Log.evlog(this, nameof(RightBeforeStructureChange_Action), action, c);
 			if (!c) return;
 			RightBeforeStructureChange();
 		}
@@ -831,7 +831,7 @@ namespace DockRotate
 		private void RightBeforeStructureChange_JointUpdate(Vessel v)
 		{
 			bool c = care(v);
-			evlog(nameof(RightBeforeStructureChange_JointUpdate), v, c);
+			Log.evlog(this, nameof(RightBeforeStructureChange_JointUpdate), v, c);
 			if (!c) return;
 			RightBeforeStructureChange();
 		}
@@ -839,7 +839,7 @@ namespace DockRotate
 		public void RightBeforeStructureChange_Part(Part p)
 		{
 			bool c = care(p);
-			evlog(nameof(RightBeforeStructureChange_Part), p, c);
+			Log.evlog(this, nameof(RightBeforeStructureChange_Part), p, c);
 			if (!c) return;
 			RightBeforeStructureChange();
 		}
@@ -847,7 +847,7 @@ namespace DockRotate
 		public void RightAfterStructureChange_Action(GameEvents.FromToAction<Part, Part> action)
 		{
 			bool c = care(action);
-			evlog(nameof(RightAfterStructureChange_Action), action, c);
+			Log.evlog(this, nameof(RightAfterStructureChange_Action), action, c);
 			if (!c) return;
 			RightAfterStructureChange();
 		}
@@ -855,9 +855,9 @@ namespace DockRotate
 		public void RightAfterStructureChange_Part(Part p)
 		{
 			bool c = !setupDone || care(p);
-			evlog(nameof(RightAfterStructureChange_Part), p, c);
+			Log.evlog(this, nameof(RightAfterStructureChange_Part), p, c);
 			if (!c)
-				Log.trace(desc(), ": setupDoneAt= {0}", setupDoneAt);
+				Log.trace(this, ": setupDoneAt= {0}", setupDoneAt);
 			if (!c) return;
 			RightAfterStructureChange();
 		}
@@ -865,7 +865,7 @@ namespace DockRotate
 		public void RightAfterSameVesselDock(GameEvents.FromToAction<ModuleDockingNode, ModuleDockingNode> action)
 		{
 			bool c = care(action);
-			evlog(nameof(RightAfterSameVesselDock), action, c);
+			Log.evlog(this, nameof(RightAfterSameVesselDock), action, c);
 			if (!c) return;
 			RightAfterStructureChangeDelayed();
 			scheduleDockingStatesCheck(false);
@@ -874,7 +874,7 @@ namespace DockRotate
 		public void RightAfterSameVesselUndock(GameEvents.FromToAction<ModuleDockingNode, ModuleDockingNode> action)
 		{
 			bool c = care(action);
-			evlog(nameof(RightAfterSameVesselUndock), action, c);
+			Log.evlog(this, nameof(RightAfterSameVesselUndock), action, c);
 			if (!c) return;
 			RightAfterStructureChangeDelayed();
 			scheduleDockingStatesCheck(false);
@@ -896,7 +896,7 @@ namespace DockRotate
 
 		public void RightAfterEditorChange(string msg)
 		{
-			Log.trace(desc(), ".RightAfterEditorChange({0}) > [{1}] < {2} {3}",
+			Log.trace(this, ".RightAfterEditorChange({0}) > [{1}] < {2} {3}",
 					msg, part.children.Count, part.parent.desc(), part.parent.descOrg()
 				);
 
@@ -931,11 +931,11 @@ namespace DockRotate
 		private void setEvents(bool cmd)
 		{
 			if (cmd == eventState) {
-				Log.detail(desc(), ".setEvents({0}) repeated", cmd);
+				Log.detail(this, ".setEvents({0}) repeated", cmd);
 				return;
 			}
 
-			Log.detail(desc(), ".setEvents({0})", cmd);
+			Log.detail(this, ".setEvents({0})", cmd);
 
 			if (cmd) {
 				GameEvents.onActiveJointNeedUpdate.Add(RightBeforeStructureChange_JointUpdate);
@@ -1115,7 +1115,7 @@ namespace DockRotate
 #endif
 			justLaunched = state == StartState.PreLaunch;
 
-			Log.trace(desc(), ".OnStart({0})", state);
+			Log.trace(this, ".OnStart({0})", state);
 
 			base.OnStart(state);
 
@@ -1134,7 +1134,7 @@ namespace DockRotate
 			if (vessel) {
 				VesselMotionManager.get(vessel); // force creation of VesselMotionManager
 			} else if (state != StartState.Editor) {
-				Log.trace(desc(), ".OnStart({0}) with no vessel", state);
+				Log.trace(this, ".OnStart({0}) with no vessel", state);
 			}
 
 			checkGuiActive();
@@ -1219,7 +1219,7 @@ namespace DockRotate
 			}
 
 			if (failMsg != "")
-				Log.detail(desc(), ".canStartRotation(): {0}", failMsg);
+				Log.detail(this, ".canStartRotation(): {0}", failMsg);
 
 			return failMsg == "";
 		}
@@ -1286,7 +1286,7 @@ namespace DockRotate
 		protected bool enqueueRotation(float angle, float speed, float startSpeed = 0f)
 		{
 			if (HighLogic.LoadedSceneIsEditor) {
-				Log.trace(desc(), ".enqueueRotation(): {0}\u00b0 in editor", angle);
+				Log.trace(this, ".enqueueRotation(): {0}\u00b0 in editor", angle);
 
 				Part host = findHostPartInEditor();
 				if (!host || !host.parent)
@@ -1308,7 +1308,7 @@ namespace DockRotate
 			}
 
 			if (!hasJointMotion) {
-				Log.trace(desc(), ".enqueueRotation(): no rotating joint, skipped");
+				Log.trace(this, ".enqueueRotation(): no rotating joint, skipped");
 				return false;
 			}
 			enabled = true;
@@ -1340,15 +1340,15 @@ namespace DockRotate
 			if (!cr)
 				return;
 			if (cr.controller != this) {
-				Log.trace(desc(), ".freezeCurrentRotation(): skipping, not controller");
+				Log.trace(this, ".freezeCurrentRotation(): skipping, not controller");
 				return;
 			}
-			Log.trace(desc(), ".freezeCurrentRotation({0}, {1})", msg, keepSpeed);
+			Log.trace(this, ".freezeCurrentRotation({0}, {1})", msg, keepSpeed);
 			cr.isContinuous();
 			float angle = cr.tgt - cr.pos;
 			enqueueFrozenRotation(angle, cr.maxvel, keepSpeed ? cr.vel : 0f);
 			cr.abort();
-			Log.trace(desc(), ": removing rotation (freeze)");
+			Log.trace(this, ": removing rotation (freeze)");
 			jointMotion.rotCur = null;
 		}
 
@@ -1369,7 +1369,7 @@ namespace DockRotate
 
 			if (frozenFlag) {
 				/* // logging disabled, it always happens during continuous rotation
-				log(desc(), ": thaw frozen rotation " + frozenRotation.desc()
+				log(this, ": thaw frozen rotation " + frozenRotation.desc()
 					+ "@" + frozenRotationControllerID);
 				*/
 				enqueueRotation(frozenRotation);
@@ -1390,7 +1390,7 @@ namespace DockRotate
 			}
 
 			if (frozenRotation != prevRot)
-				Log.trace(desc(), ".updateFrozenRotation({0}: {1} -> {2}", context, prevRot, frozenRotation);
+				Log.trace(this, ".updateFrozenRotation({0}: {1} -> {2}", context, prevRot, frozenRotation);
 		}
 
 		protected void enqueueFrozenRotation(float angle, float speed, float startSpeed = 0f)
@@ -1399,7 +1399,7 @@ namespace DockRotate
 			angle += frozenAngle;
 			SmoothMotion.isContinuous(ref angle);
 			frozenRotation.Set(angle, speed, startSpeed);
-			Log.trace(desc(), ".enqueueFrozenRotation(): {0} -> {1}", prev.desc(), frozenRotation.desc());
+			Log.trace(this, ".enqueueFrozenRotation(): {0} -> {1}", prev.desc(), frozenRotation.desc());
 		}
 
 		private int lastUsefulFixedUpdate = 0;
@@ -1414,46 +1414,15 @@ namespace DockRotate
 			} else if (frozenFlag || currentRotation() != null) {
 				lastUsefulFixedUpdate = Time.frameCount;
 			} else if (Time.frameCount - lastUsefulFixedUpdate > 10) {
-				// log(part.desc(), ": disabling useless MonoBehaviour updates");
+				// log(part, ": disabling useless MonoBehaviour updates");
 				enabled = false;
 			}
 		}
 
-		public string desc(bool bare = false)
-		{
-			return (bare ? "" : descPrefix() + ":") + part.desc(true);
-		}
-
 		public abstract string descPrefix();
-
-		protected void evlog(string name, Vessel v, bool care)
+		string Log.IClient.who(bool verbose)
 		{
-			evlog(name + "(" + v.desc() + ")", care);
-		}
-
-		protected void evlog(string name, Part p, bool care)
-		{
-			evlog(name + "(" + p.desc() + ")", care);
-		}
-
-		protected void evlog(string name, GameEvents.FromToAction<Part, Part> action, bool care)
-		{
-			evlog(name + "(" + action.from.desc() + ", " + action.to.desc() + ")", care);
-		}
-
-		protected void evlog(string name, GameEvents.FromToAction<ModuleDockingNode, ModuleDockingNode> action, bool care)
-		{
-			evlog(name + "(" + action.from.part.desc() + ", " + action.to.part.desc() + ")", care);
-		}
-
-		protected void evlog(string name, uint id1, uint id2, bool care)
-		{
-			evlog(name + "(" + id1 + ", " + id2 + ")", care);
-		}
-
-		protected void evlog(string name, bool care)
-		{
-			Log.trace(desc(), ": *** EVENT *** {0}, {1}", name, (care ? "care" : "don't care"));
+			return (verbose ? descPrefix() + ":" : "") + part.desc(true);
 		}
 	}
 }

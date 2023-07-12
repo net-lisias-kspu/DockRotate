@@ -33,7 +33,7 @@ using Data = KSPe.IO.Data<DockRotate.DockingStateChecker>;
 
 namespace DockRotate
 {
-	public class DockingStateChecker
+	public class DockingStateChecker: Log.IClient
 	{
 		private const string configName = nameof(DockingStateChecker);
 
@@ -62,7 +62,7 @@ namespace DockRotate
 			if (lastLoaded != null && lastLoadedAt == Time.frameCount)
 				return lastLoaded;
 
-			Log.trace(nameof(DockingStateChecker), "loading");
+			Log.trace("{0} is loading", nameof(DockingStateChecker));
 			lastLoaded = null;
 			try {
 				if (!DATA.IsLoadable) DATA.Save(DEFAULT.Load().Node);
@@ -344,7 +344,7 @@ namespace DockRotate
 			}
 		}
 
-		public class Result {
+		public class Result : Log.IClient {
 			private List<string> msgList = new List<string>();
 			public bool foundError = false;
 			private string indentString = "";
@@ -373,7 +373,7 @@ namespace DockRotate
 				for (int i = 0; i < msgList.Count; i++)
 					report.AppendLine(msgList[i]);
 				report.Append(new string('#', 80));
-				Log.detail(nameof(DockingStateChecker), report.ToString());
+				Log.detail(this, report.ToString());
 			}
 
 			private HashSet<string> chk = new HashSet<string>();
@@ -410,6 +410,8 @@ namespace DockRotate
 				chk.Add(key);
 				return true;
 			}
+
+			string Log.IClient.who(bool verbose) => nameof(DockingStateChecker);
 		}
 
 		public class NodeState
@@ -761,5 +763,7 @@ namespace DockRotate
 			yield return new WaitForSeconds(waitSeconds);
 			p.SetHighlightDefault();
 		}
+
+		string Log.IClient.who(bool verbose) => nameof(DockingStateChecker);
 	}
 }

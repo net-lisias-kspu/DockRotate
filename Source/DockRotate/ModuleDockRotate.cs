@@ -122,9 +122,9 @@ namespace DockRotate
 			BaseEvent evt = Events["CheckDockingState"];
 			if (evt != null) {
 				evt.guiActive = active || DEBUGMODE;
-				// log(desc(), ".showCheckDockingState(" + active + "): done");
+				// log(this, ".showCheckDockingState(" + active + "): done");
 			} else {
-				Log.trace(desc(), ".showCheckDockingState({0}): can't find event", active);
+				Log.trace(this, ".showCheckDockingState({0}): can't find event", active);
 			}
 		}
 
@@ -139,27 +139,27 @@ namespace DockRotate
 			otherPart = null;
 			if (!dockingNode || dockingNode.referenceNode == null)
 				return null;
-			Log.trace(desc(), ".findMovingNodeInEditor(): referenceNode = {0}", dockingNode.referenceNode.desc());
+			Log.trace(this, ".findMovingNodeInEditor(): referenceNode = {0}", dockingNode.referenceNode.desc());
 			AttachNode otherNode = dockingNode.referenceNode.getConnectedNode();
-			Log.trace(desc(), ".findMovingNodeInEditor(): otherNode = {0}", otherNode.desc());
+			Log.trace(this, ".findMovingNodeInEditor(): otherNode = {0}", otherNode.desc());
 			if (otherNode == null)
 				return null;
 			otherPart = otherNode.owner;
-			Log.trace(desc(), ".findMovingNodeInEditor(): otherPart = {0}", otherPart.desc());
+			Log.trace(this, ".findMovingNodeInEditor(): otherPart = {0}", otherPart.desc());
 			if (!otherPart)
 				return null;
 			ModuleDockingNode otherDockingNode = otherPart.FindModuleImplementing<ModuleDockingNode>();
-			Log.trace(desc(), ".findMovingNodeInEditor(): otherDockingNode = {0}", (otherDockingNode ? otherDockingNode.part.desc() : "null"));
+			Log.trace(this, ".findMovingNodeInEditor(): otherDockingNode = {0}", (otherDockingNode ? otherDockingNode.part.desc() : "null"));
 			if (!otherDockingNode)
 				return null;
-			Log.detail(desc(), ".findMovingNodeInEditor(): otherDockingNode.referenceNode = {0}", otherDockingNode.referenceNode.desc());
+			Log.detail(this, ".findMovingNodeInEditor(): otherDockingNode.referenceNode = {0}", otherDockingNode.referenceNode.desc());
 			if (otherDockingNode.referenceNode == null)
 				return null;
 			if (!otherDockingNode.matchType(dockingNode)) {
-				Log.trace(desc(), ".findMovingNodeInEditor(): mismatched node types {0} != {1}", dockingNode.nodeType, otherDockingNode.nodeType);
+				Log.trace(this, ".findMovingNodeInEditor(): mismatched node types {0} != {1}", dockingNode.nodeType, otherDockingNode.nodeType);
 				return null;
 			}
-			Log.trace(desc(), ".findMovingNodeInEditor(): node test is {0}", (otherDockingNode.referenceNode.FindOpposingNode() == dockingNode.referenceNode));
+			Log.trace(this, ".findMovingNodeInEditor(): node test is {0}", (otherDockingNode.referenceNode.FindOpposingNode() == dockingNode.referenceNode));
 
 			return dockingNode.referenceNode;
 		}
@@ -169,31 +169,31 @@ namespace DockRotate
 			dockingNode = part.FindModuleImplementing<ModuleDockingNode>();
 
 			if (!dockingNode) {
-				Log.trace(desc(), ".setupLocalAxis({0}): no docking node", state);
+				Log.trace(this, ".setupLocalAxis({0}): no docking node", state);
 				return false;
 			}
 
 			partNodePos = Vector3.zero.Tp(dockingNode.T(), part.T());
 			partNodeAxis = Vector3.forward.Td(dockingNode.T(), part.T());
-			Log.trace(desc(), ".setupLocalAxis({0}) done: {1}@{2}", state, partNodeAxis, partNodePos);
+			Log.trace(this, ".setupLocalAxis({0}) done: {1}@{2}", state, partNodeAxis, partNodePos);
 			return true;
 		}
 
 		protected override PartJoint findMovingJoint()
 		{
 			if (!dockingNode || !dockingNode.part) {
-				Log.trace(desc(), ".findMovingJoint(): no docking node");
+				Log.trace(this, ".findMovingJoint(): no docking node");
 				return null;
 			}
 
 			ModuleDockingNode other = dockingNode.getDockedNode();
 			if (!other || !other.part) {
-				Log.trace(desc(), ".findMovingJoint(): no other, id = {0}", dockingNode.dockedPartUId);
+				Log.trace(this, ".findMovingJoint(): no other, id = {0}", dockingNode.dockedPartUId);
 				return null;
 			}
 
 			if (!dockingNode.matchType(other)) {
-				Log.trace(desc(), ".findMovingJoint(): mismatched node types");
+				Log.trace(this, ".findMovingJoint(): mismatched node types");
 				return null;
 			}
 
@@ -201,7 +201,7 @@ namespace DockRotate
 			if (otherModule) {
 				if (!smartAutoStruts && otherModule.smartAutoStruts) {
 					smartAutoStruts = true;
-					Log.trace(desc(), ".findMovingJoint(): smartAutoStruts activated by {0}", otherModule.desc());
+					Log.trace(this, ".findMovingJoint(): smartAutoStruts activated by {0}", otherModule);
 				}
 			}
 
@@ -237,21 +237,21 @@ namespace DockRotate
 				isDocked = hasJointMotion;
 			} else if (isDocked != hasJointMotion) {
 				isDocked = hasJointMotion;
-				Log.trace(desc(), ": new docked state {0}", isDocked);
+				Log.trace(this, ": new docked state {0}", isDocked);
 			}
 
 			if (hasJointMotion && jointMotion.joint.Host == part && !frozenFlag) {
 				float snap = autoSnapStep();
-				Log.detail(desc(), ".autoSnapStep() = {0}", snap);
+				Log.detail(this, ".autoSnapStep() = {0}", snap);
 				ModuleDockRotate other = jointMotion.joint.Target.FindModuleImplementing<ModuleDockRotate>();
 				if (other) {
 					float otherSnap = other.autoSnapStep();
-					Log.detail(other.desc(), ".autoSnapStep() = {0}", otherSnap);
+					Log.detail(other, ".autoSnapStep() = {0}", otherSnap);
 					if (otherSnap > 0f && (snap.isZero() || otherSnap < snap))
 						snap = otherSnap;
 				}
 				if (!snap.isZero() && !onLaunch) {
-					Log.detail(jointMotion.desc(), ": autosnap at {0}", snap);
+					Log.detail(jointMotion, ": autosnap at {0}", snap);
 					enqueueFrozenRotation(jointMotion.angleToSnap(snap), 5f);
 				}
 			}
@@ -278,7 +278,7 @@ namespace DockRotate
 				step = rotationStep;
 				source = "rotationStep";
 			}
-			Log.trace(desc(), ".autoSnapStep() = {0} from {1}", step, source);
+			Log.trace(this, ".autoSnapStep() = {0} from {1}", step, source);
 			if (step >= 360f)
 				step = 0f;
 			return step;
